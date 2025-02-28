@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 import os
 
 setup(
-    name="PTAP", #no spaces here
+    name="PTAP",
     version="beta 0.1",
     packages=find_packages(where="ptap"),
     package_dir={"": "ptap"},
     install_requires=[
-        # complete
+        #to complete
     ],
     entry_points={
         "console_scripts": [
