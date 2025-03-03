@@ -1,0 +1,33 @@
+{
+    "GENERATION MEMOIRE TECHNIQUE API/": {
+        ".git/": {},
+        "examples/": {
+            "Memoire technique(15).pdf": {},
+            "Memoire technique(16).pdf": {},
+            "Memoire technique(17).pdf": {},
+            "Memoire technique(18).pdf": {},
+            "Memoire technique(19).pdf": {},
+            "Memoire technique(20).pdf": {},
+            "Memoire technique(21).pdf": {},
+            "Memoire technique(22).pdf": {},
+            "Memoire technique(23).pdf": {}
+        },
+        "input/": {
+            "RelanceVILLEPREUX RC.pdf": {}
+        },
+        "output/": {
+            "memoire_technique_final.docx": {},
+            "pdf_final.pdf": {}
+        },
+        "templates/": {
+            "SE/": {
+                "MOYENS_HUMAINS.docx": {},
+                "STRAT_RSE.docx": {}
+            },
+            "TTC/": {
+                "PAGE_TITRE.docx": {}
+            }
+        },
+        "__pycache__/": {}
+    }
+}
