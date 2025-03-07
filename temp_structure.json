@@ -1,5 +1,18 @@
 {
     "GENERATION MEMOIRE TECHNIQUE API/": {
+        ".env": {},
+        ".gitignore": {},
+        ".gitlab-ci.yml": {},
+        "app.py": {},
+        "backend.py": {},
+        "config.py": {},
+        "delete_sections.py": {},
+        "installation.bat": {},
+        "prompts.py": {},
+        "remove_blank_pages.py": {},
+        "requirements.txt": {},
+        "run.bat": {},
+        "sections.json": {},
         ".git/": {},
         "examples/": {
             "Memoire technique(15).pdf": {},
@@ -11,13 +24,6 @@
             "Memoire technique(21).pdf": {},
             "Memoire technique(22).pdf": {},
             "Memoire technique(23).pdf": {}
-        },
-        "input/": {
-            "RelanceVILLEPREUX RC.pdf": {}
-        },
-        "output/": {
-            "memoire_technique_final.docx": {},
-            "pdf_final.pdf": {}
         },
         "templates/": {
             "SE/": {
