@@ -1,0 +1,27 @@
+Metadata-Version: 2.2
+Name: ptap
+Version: 0.1.0
+Summary: The best tool to generate AI prompts from code projects and make any AI understand a whole project!
+Home-page: https://github.com/Far3000-YT/PTAP
+Author: Far3k
+Author-email: far3000yt@gmail.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: requires-python
+Dynamic: summary
+
+## PTAP - Project To AI Prompt
+
+Goal is to be able to use a command, with possible options to exclude directories, and basically, get an output in a .txt or in your clipboard, to basically give the full context (a well done and structured context) of any type of coding project to an AI (in a single prompt) !

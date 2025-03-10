@@ -1,6 +1,6 @@
-from file_reader import *
+from typing import List
+from .file_reader import read_file
 import os
-from visualizer import *
 
 space = "\n\n\n"
 
@@ -20,7 +20,15 @@ def get_files_root(main_root: str, skipped_folders: List):
                 files_list[file_list_index] = file_root
     print(files_list)            
     return files_list
-    
 
-print(os.getcwd())
-get_files_root(os.getcwd(), [".git", "__pycache__"])
+def add_intro(prompt: str, intro: str):
+    prompt += intro + space
+
+def add_structure(prompt: str, json_structure: str):
+    prompt += json_structure + space
+
+def add_files_content(prompt: str, files_root: dict):
+    #file title then file content added in the prompt
+    for file_name, file_path in files_root.keys():
+        prompt += file_name + space #specify in the prompt the path and which file we're reading
+        prompt += read_file(file_path) + space #specify in the prompt the content of that file
