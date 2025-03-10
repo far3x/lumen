@@ -56,7 +56,7 @@ def chunk_read(file_path: str, chunk_size: int = 1024):
 def read_file(file_path: str, allowed_files: List = allowed_files):
     if any(file_path.endswith(allowed_file) for allowed_file in allowed_files):
         content = str()
-        with open(file_path) as file:
+        with open(file_path, "r", encoding = "utf-8") as file: #only reading here
             for chunk in chunk_read(file):
                 content += chunk
         return content
