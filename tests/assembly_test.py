@@ -1,0 +1,2 @@
+#Not doing testcases for this one, tbh it doesnt need a testcase its just adding a string in a string !
+#If you think a testcase is needed for this (while I tested in the backend manually all my functions) do not hesitate to mention it, I can do it, it's just it's pretty useless here

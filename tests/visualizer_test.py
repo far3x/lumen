@@ -2,11 +2,10 @@ from ptap import visualizer
 import os, json
 
 #we test the json structure of the existing project here
-#structure we want https://imgur.com/a/iAjXl0n
 
 #structure ALWAYS starts with files and its in alphabetical order since the algo I made was a bit different
 #can't rly test the structure here since I'm updating the project way too much, so I just print the output and it should look like this in any os :
-#this is the output when we ignore .git ptap.egg-info and __pycache__
+#this is the output when we ignore ".git", "ptap.egg-info" and "__pycache__" folders
 
 """
 {
@@ -35,7 +34,7 @@ import os, json
 """
 
 #data print above
-data = json.dumps(
+data = json.dumps( 
     visualizer.get_project_structure(
         root_path = os.getcwd(), 
         skipped_folders = [ #no need to specify the "/" element, and will show the directory but not the content

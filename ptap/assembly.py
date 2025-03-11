@@ -1,5 +1,5 @@
+from ptap.file_reader import read_file
 from typing import List
-from .file_reader import read_file
 import os
 
 space = "\n\n\n"
@@ -18,7 +18,6 @@ def get_files_root(main_root: str, skipped_folders: List):
                 file_root = f"{root}\\{file}"
                 file_list_index = "/".join(file_root.split("\\")[min_level::])
                 files_list[file_list_index] = file_root
-    print(files_list)            
     return files_list
 
 def add_intro(prompt: str, intro: str):
