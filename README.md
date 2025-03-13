@@ -3,7 +3,7 @@
 **Effortlessly Generate AI Prompts from Your Code Projects for Enhanced AI Understanding**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<!--[![PyPI version](https://badge.fury.io/py/ptap.svg)](https://badge.fury.io/py/ptap) WILL COMPLETE AS SOON AS ON PIP-->
+[![PyPI version](https://badge.fury.io/py/ptap.svg)](https://badge.fury.io/py/ptap)
 
 PTAP (Project To AI Prompt) is a command-line tool designed to simplify the process of providing comprehensive context to AI models about your coding projects.  With PTAP, you can quickly generate a structured and informative prompt containing your project's file structure and code content, enabling AI to understand your codebase effectively.
 
@@ -37,7 +37,7 @@ While PTAP is a powerful tool, it's important to be aware of potential limitatio
 
 ## Installation
 
-You can easily install PTAP using pip: (soon)
+You can easily install PTAP using pip:
 
 `pip install ptap`
 
