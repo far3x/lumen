@@ -7,15 +7,14 @@
 import os, json
 
 BASE_CONFIG = {
-    "intro_text": """
-    Here is a coding project I am working on.
-    It starts with the full structure of the project, then you will have each file title and file content.
-    
-    Respond with 'OK' and for now, just understand the project fully.
-    I will ask for help in the next prompt so you can help me with this project.
-    """,
+    "intro_text": """Here is a coding project I am working on.
+It starts with the full structure of the project, then you will have each file title and file content.
+
+Respond with 'OK' and for now, just understand the project fully.
+I will ask for help in the next prompt so you can help me with this project.
+""",
     "show_intro": True,
-    "title_text": "--- {file} ---",
+    "title_text": "--- {file} ---", #{file} will be replaced by the file name, KEEP IT PLEASE
     "show_title": True,
     "skipped_folders": [
         ".git", "__pycache__", "node_modules", "venv", ".venv", ".svn", ".hg", "obj",
@@ -87,6 +86,7 @@ def get_config_file():
 
 #get config infos
 
+#part to redo, very repetitive and useless but works
 def get_intro():
     with open(get_config_file(), "r") as data:
         d = json.load(data)

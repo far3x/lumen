@@ -3,7 +3,7 @@ import os
 
 setup(
     name = "ptap",
-    version = "0.1.0",
+    version = "v1.0",
     packages = find_packages(include = ["ptap", "ptap.*"]),
     entry_points = {
         "console_scripts": [
