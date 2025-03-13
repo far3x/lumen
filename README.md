@@ -9,7 +9,7 @@ PTAP (Project To AI Prompt) is a command-line tool designed to simplify the proc
 
 ## Why PTAP?
 
-In the age of powerful AI models, leveraging them for code understanding, analysis, or generation is becoming increasingly valuable. However, effectively communicating the context of an entire coding project to an AI in a single prompt can be challenging and time-consuming.
+Using AI for code understanding, analysis, or generation is becoming increasingly valuable. However, effectively communicating the context of an entire coding project to an AI in a single prompt can be challenging and time-consuming.
 
 **PTAP solves this problem by:**
 
