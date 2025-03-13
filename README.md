@@ -1,133 +1,126 @@
-# PTAP - Project To AI Prompt
+#   PTAP - Project To AI Prompt
 
-**Effortlessly Generate AI Prompts from Your Code Projects for Enhanced AI Understanding**
+**Effortlessly Prepare Your Code Projects for AI Analysis**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/ptap.svg)](https://badge.fury.io/py/ptap)
 
-PTAP (Project To AI Prompt) is a command-line tool designed to simplify the process of providing comprehensive context to AI models about your coding projects.  With PTAP, you can quickly generate a structured and informative prompt containing your project's file structure and code content, enabling AI to understand your codebase effectively.
+Tired of manually crafting prompts for AI to understand your code? PTAP automates the process, generating structured prompts that include your project's file structure and code content. Give your AI the complete context it needs with PTAP.
 
-## Why PTAP?
+##   Why Use PTAP?
 
-Using AI for code understanding, analysis, or generation is becoming increasingly valuable. However, effectively communicating the context of an entire coding project to an AI in a single prompt can be challenging and time-consuming.
+AI is powerful for code analysis, but it needs context. Manually providing that context is time-consuming and error-prone.
 
-**PTAP solves this problem by:**
+**PTAP solves this by:**
 
-*   **Automating Prompt Creation:**  No more manual copying and pasting of file paths and code snippets. PTAP does it all for you.
-*   **Structured Context:**  PTAP generates a well-structured prompt that includes:
-    *   A JSON representation of your project's directory hierarchy.
-    *   The content of your source code files.
-    *   Clear file titles (optional) to indicate file paths.
-*   **Offline & Secure:**  Unlike online tools that may require uploading your code, PTAP runs locally on your machine, ensuring the privacy and security of your projects.
-*   **Customizable:** Tailor the generated prompt to your needs by excluding specific folders, customizing the introduction text, and controlling the inclusion of file titles.
-*   **Efficiency:**  Quickly prepare project context for AI interactions, saving you valuable time and effort.
+* **Automating Prompt Generation:** PTAP handles the tedious work of gathering file paths and code.
+* **Providing Structured Context:** Prompts include a clear JSON representation of your project's structure and file content.
+* **Ensuring Privacy and Security:** PTAP runs locally, so your code never leaves your machine.
+* **Offering Customization:** Tailor prompts by excluding folders, adding custom introductions, and controlling file title inclusion.
+* **Boosting Efficiency:** Quickly prepare project context, saving you time and effort.
 
-**Currently, there isn't a readily available online tool specifically designed to structure a coding project into an AI prompt like PTAP does.** PTAP fills this gap, providing a focused and efficient solution for developers looking to leverage AI for code-related tasks.
+**PTAP fills a crucial gap: there's no easy way to give AI comprehensive project context. It streamlines the workflow for any developer using AI for code-related tasks.**
 
-## Limitations
+##   Installation
 
-While PTAP is a powerful tool, it's important to be aware of potential limitations:
+Ensure you have Python 3.7+ installed. Then, install PTAP using pip:
 
-*   **AI Input Length Limits:**  Some AI models have limitations on the maximum input length they can process. For very large projects, the generated prompt might exceed these limits and could be truncated by the AI, potentially affecting its understanding.
-*   **Large Projects & Performance:**  For extremely large projects with thousands of files, PTAP might take a noticeable amount of time to process and generate the prompt. We are actively working on performance optimizations for future updates.
-*   **File Readability:** PTAP is designed to read plain text code files. Certain file formats, such as `.ipynb` (Jupyter Notebooks) or binary files, may not be directly readable as text and their content might not be accurately included in the generated prompt.  Support for more file types may be added in future versions.
-*   **AI Interpretation Variability:**  The effectiveness of the generated prompt depends on the specific AI model being used and its ability to interpret structured text and code context. Different AI models may have varying levels of understanding.
-*   **Potential Edge Cases:**  While PTAP is designed to handle various project structures and file types, there might be unforeseen edge cases or project configurations where it may not function perfectly. Please report any issues you encounter!
-*   **Ongoing Development:** PTAP is under active development, and we are committed to continuously improving its performance, features, and user experience. Stay tuned for future updates and enhancements!
+```bash
+pip install ptap
+```
 
-## Installation
+##   Usage
 
-You can easily install PTAP using pip:
+PTAP is a command-line tool. Here are the key commands:
 
-`pip install ptap`
+**1. Basic Usage (Current Directory, Clipboard):**
 
-Ensure you have Python 3.7 or later installed on your system.
+```bash
+ptap
+```
 
-## Functionalities & Usage Examples
+* Analyzes the current directory.
+* Generates an AI prompt.
+* Copies the prompt to your clipboard.
 
-PTAP is a command-line tool accessible via the `ptap` command in your terminal.
+**2. Specify a Project Path:**
 
-**Basic Usage (Current Directory, Clipboard Output):**
+```bash
+ptap folder1/folder2/pathtoproject
+```
 
-In your project's root directory, simply run:
+**3. Output to a Text File:**
 
-`ptap`
+```bash
+ptap -t project_prompt
+```
 
-This will:
+* Saves the prompt to `project_prompt.txt` in the project root.
 
-1.  Analyze your current directory as the project root.
-2.  Generate a structured AI prompt.
-3.  Copy the prompt to your clipboard, ready to be pasted into your AI of choice.
+**4. Open Configuration File:**
 
-**Specify a Project Path:**
+```bash
+ptap -c
+```
 
-To process a project located at a different path, provide the path as an argument:
+* Opens `config.json` (located in `~/.ptap/config.json`) for customization.
 
-`ptap folder1/folder2/pathtoproject`
+**5. Reset Configuration to Default:**
 
-**Output to a Text File:**
+```bash
+ptap -r
+```
 
-To save the generated prompt to a `.txt` file in your project's root directory, use the `-t` or `--txt` option followed by the desired filename (without the `.txt` extension):
+**6. Hide Elements in the Prompt:**
 
-`ptap -t project_prompt`
+* Hide introduction text:
 
-This will create a file named `project_prompt.txt` in your project's root.
+    ```bash
+    ptap -hd intro
+    ```
 
-**Open Configuration File:**
+* Hide file titles:
 
-To customize PTAP's settings, open the configuration file using the `-c` or `--configure` option:
+    ```bash
+    ptap -hd title
+    ```
 
-`ptap -c`
+* Hide both:
 
-This will open the `config.json` file in your default code editor, allowing you to modify settings like skipped folders, intro text, and title format. The configuration file is located in `~/.ptap/config.json` (in your user's home directory).
+    ```bash
+    ptap -hd intro,title
+    ```
 
-**Reset Configuration to Default:**
+##   Configuration Options (in `config.json`)
 
-To revert all settings back to their original defaults, use the `-r` or `--reset` option:
+* `intro_text`: Introductory text at the beginning of the prompt.
+* `show_intro`: Boolean to show/hide the intro text.
+* `title_text`: Format for file titles (e.g., "--- {file} ---").
+* `show_title`: Boolean to show/hide file titles.
+* `skipped_folders`: List of folders to exclude (e.g., `.git`, `__pycache__`).
+* `allowed_files` (in `ptap/file_reader.py`): List of file extensions to include/exclude.
 
-`ptap -r`
+##   Limitations
 
-**Hide Elements in the Prompt:**
+* **AI Input Limits:** Large projects may generate prompts that exceed AI input limits.
+* **Large Project Performance:** Processing very large projects can take time.
+* **File Readability:** PTAP is designed for text-based code files.
+* **AI Interpretation:** AI understanding of the prompt can vary.
+* **Edge Cases:** Unexpected project structures may cause issues.
+* **Ongoing Development:** PTAP is actively being improved.
 
-You can selectively hide elements from the generated prompt using the `-hd` or `--hide` option.  Specify elements to hide as a comma-separated list:
+##   License
 
-*   **Hide the introduction text:**
+PTAP is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-    `ptap -hd intro`
+##   Contributing
 
-*   **Hide file titles (not recommended for AI understanding):**
+Contributions are welcome! Please report issues or submit pull requests on the [GitHub repository](https://github.com/Far3000-YT/PTAP).
 
-    `ptap -hd title`
-
-*   **Hide both intro and titles:**
-
-    `ptap -hd intro,title`
-
-**Configuration Options:**
-
-The `config.json` file allows you to customize the following:
-
-*   `intro_text`:  The introductory text added at the beginning of the prompt.
-*   `show_intro`:  Boolean to control whether the intro text is included.
-*   `title_text`:  The format for file titles (e.g., "--- {file} ---").
-*   `show_title`: Boolean to control whether file titles are included.
-*   `skipped_folders`:  A list of folder names to be excluded from project analysis (e.g., `.git`, `__pycache__`, `node_modules`).
-*   `allowed_files` (in `ptap/file_reader.py`): You can modify the `allowed_files` list in `ptap/file_reader.py` to include or exclude specific file extensions that PTAP will process.
-
-## License
-
-PTAP is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-If you want to contribute, do not hesitate ! Feedback is also needed, especially if you use any OS that is not Windows, since the module was not tested on other OS's yet.
-
-If you encounter any issues, have feature requests, or would like to contribute to PTAP, please feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/Far3000-YT/PTAP).
-
-## Author
+##   Author
 
 Developed by Far3k ([GitHub Profile](https://github.com/Far3000-YT)) - Mail: far3000yt@gmail.com - Discord: @far3000 - X: @0xFar3000
 
 ---
 
-**Start leveraging AI to understand your code projects better with PTAP!**
+**Start using AI more effectively with PTAP!**
