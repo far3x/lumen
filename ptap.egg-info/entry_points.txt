@@ -1,0 +1,2 @@
+[console_scripts]
+ptap = ptap.main:main
