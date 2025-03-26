@@ -1,1 +1,2 @@
-#None for now
+requests
+pyperclip

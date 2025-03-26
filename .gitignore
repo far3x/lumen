@@ -1,4 +1,4 @@
-./build/
-./dist/
-./ptap.egg-info/
+build/
+dist/
+ptap.egg-info/
 __pycache__/

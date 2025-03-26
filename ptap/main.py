@@ -1,31 +1,10 @@
 from ptap.visualizer import *
 from ptap.assembly import *
 from ptap.config import *
+from ptap.github import *
 
 from typing import List
 import json, os, platform, subprocess, argparse, pyperclip
-
-"""
-Idea : 
-
-You're in the terminal, you type "ptap" only, it shows the full structure of the actual directory you're in with the settings you have, or base settings if you didn't change anything
-So a structured prompt with the path structure in a json format, then each file title and file content, spaced correctly
-
-Options :
- CLI  DONE - give the path manually if you're not directly in the correct directory
- CLI  DONE - change config file (stocked in pc memory) with "ptap -c"
- CLI  DONE - specify the output (base case = will be in clipboard), but would be able to generate a .txt in the selected folder to be able to change some content in the file manually
- CLI  DONE - reset settings "ptap -r" would reset everything
- CLI  DONE - TO IMPROVE IN FUTURE - not include or hide file intro, structure, or whatever "ptap -h intro" or "ptap -h intro,structure,title"
-
-After each pip update, keep the settings so the user would not lose any content that was changed like title, intro etc
-This might change, so look at the documentation to understand the module. (That's draft basically)
-"""
-
-
-
-#when the user types ptap, initializes check_config() then we add all options like in the file base
-
 
 #get parameters initially from file
 def get_parameters():
@@ -67,9 +46,63 @@ def make_structure(path: str, skipped: List):
 
 ############################################
 #                                          #
-#     parsing part, hardest part maybe     #
+#    parsing part, hardest part i guess    #
 #                                          #
 ############################################
+
+def ptap_command(args, isGitHub: bool = False, GitHubRoot: str = None):
+    print("Launching...")
+    root_path = args.path
+    if isGitHub:
+        if GitHubRoot:
+            root_path = GitHubRoot
+        else:
+            print("The path to the GitHub repo was not found!")
+            exit()
+    hidden_elements = []
+
+    if args.txt:
+        output_file = args.txt
+    else:
+        output_file = None
+
+    check_config() #in case of first run, will automatically add config files etc
+    base_parameters = get_parameters()
+
+    if args.hide:
+        hidden_elements = [element.strip() for element in args.hide.split(",")] #hidden elements into list that will be replaced
+
+    if "intro" in hidden_elements:
+        print("did")
+        base_parameters["show_intro"] = False
+    
+    if "title" in hidden_elements:
+        base_parameters["show_title"] = False
+
+
+    #STRUCTURE, MOST IMPORTANT FOR PROMPT
+    structure = ""
+    if base_parameters["show_intro"]:
+        structure = add_intro(structure, base_parameters["intro_text"])
+
+    structure = add_structure(structure, make_structure(root_path, get_parameters()["skipped_folders"]))
+
+    show_title = True
+    if bool(base_parameters["show_title"]) == False:
+        show_title = False
+    
+    files_root = get_files_root(root_path, base_parameters["skipped_folders"])
+    structure = add_files_content(structure, files_root, show_title, title_text = base_parameters["title_text"])
+
+    if output_file is None:
+        pyperclip.copy(structure)
+
+    elif output_file is not None:
+        with open(f"{root_path}/{output_file}.txt", "w+") as file:
+            file.write(structure)
+        file.close()
+    
+    print("Done ! Paste your prompt into an AI, or open your text folder to get the output.")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -111,6 +144,13 @@ def main():
         help = "Specify the output file name (in a .txt file that will be in the root. If you don't use this argument, your content will be copied in your clipboard. For example, 'ptap -t prompt' will generate a file named 'prompt.txt' with the whole project in a structured prompt."
     )
 
+    parser.add_argument(
+        "-g",
+        "--github",
+        metavar = "GitHub Repo Link",
+        help = "Give a structured output from an existing GitHub repo"
+    )
+
     args = parser.parse_args()
 
     if args.configure:
@@ -121,51 +161,28 @@ def main():
     elif args.reset:
         check_config()
         reset_config()
+    
+    #idea for github import would be to git clone the project locally in ptap folder, then run the command there, then remove the downloaded folder.
+    elif args.github: #if github link we go to this repo, take all the files and make an analysis
+        git_exists = check_git()
+        if git_exists == False:
+            exit()
+
+        github_link = args.github
+
+        check_repo(github_link)
+        if github_link:
+            git_root = download_repo(github_link)
+            ptap_command(args = args, isGitHub = True, GitHubRoot = git_root)
+            remove_repo(git_root)
+        else:
+            print("GitHub repo doesn't exist, please try again with a correct link (check that the repository is NOT private, and that you are connected to internet !)")
+            exit()
+        
 
     else: #if not reset or config, main purpose of the script
-        root_path = args.path
-        hidden_elements = []
-
-        if args.txt:
-            output_file = args.txt
-        else:
-            output_file = None
-    
-        check_config() #in case of first run, will automatically add config files etc
-        base_parameters = get_parameters()
-
-        if args.hide:
-            hidden_elements = [element.strip() for element in args.hide.split(",")] #hidden elements into list that will be replaced
-    
-        if "intro" in hidden_elements:
-            print("did")
-            base_parameters["show_intro"] = False
+        ptap_command(args = args)
         
-        if "title" in hidden_elements:
-            base_parameters["show_title"] = False
-
-
-        #STRUCTURE, MOST IMPORTANT FOR PROMPT
-        structure = ""
-        if base_parameters["show_intro"]:
-            structure = add_intro(structure, base_parameters["intro_text"])
-
-        structure = add_structure(structure, make_structure(root_path, get_parameters()["skipped_folders"]))
-
-        show_title = True
-        if bool(base_parameters["show_title"]) == False:
-            show_title = False
-        
-        files_root = get_files_root(root_path, base_parameters["skipped_folders"])
-        structure = add_files_content(structure, files_root, show_title, title_text = base_parameters["title_text"])
-
-        if output_file is None:
-            pyperclip.copy(structure)
-
-        elif output_file is not None:
-            with open(f"{root_path}/{output_file}.txt", "w+") as file:
-                file.write(structure)
-            file.close()
 
 if __name__ == "__main__":
     main()

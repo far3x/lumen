@@ -2,6 +2,7 @@ from ptap.file_reader import *
 from typing import List
 import os
 
+
 PROMPT_SEPERATOR = "\n\n\n"
 
 def get_files_root(main_root: str, skipped_folders: List, allowed: List = allowed_files):

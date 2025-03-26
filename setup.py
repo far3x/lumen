@@ -3,8 +3,12 @@ import os
 
 setup(
     name = "ptap",
-    version = "v1.0.1",
+    version = "v1.1",
     packages = find_packages(include = ["ptap", "ptap.*"]),
+    install_requires = [
+        "requests",
+        "pyperclip",
+    ],
     entry_points = {
         "console_scripts": [
             "ptap=ptap.main:main",

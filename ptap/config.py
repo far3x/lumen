@@ -10,11 +10,11 @@ BASE_CONFIG = {
     "intro_text": """Here is a coding project I am working on.
 It starts with the full structure of the project, then you will have each file title and file content.
 
-Respond with 'OK' and for now, just understand the project fully.
-I will ask for help in the next prompt so you can help me with this project.
+Respond with 'OK' and for now, and just understand the project completely.
+I will ask for help in the next prompt so you can assist me with this project.
 """,
     "show_intro": True,
-    "title_text": "--- {file} ---", #{file} will be replaced by the file name, KEEP IT PLEASE
+    "title_text": "File : {file}", #{file} will be replaced by the file name, KEEP IT PLEASE
     "show_title": True,
     "skipped_folders": [
         ".git", "__pycache__", "node_modules", "venv", ".venv", ".svn", ".hg", "obj",
