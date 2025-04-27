@@ -34,6 +34,23 @@ allowed_files = [
     ".gd"
 ]
 
+non_allowed_read = [
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "Pipfile.lock",
+    "poetry.lock",
+    "composer.lock",
+    "Gemfile.lock",
+    "Cargo.lock",
+    "Podfile.lock",
+    ".DS_Store",
+    "Thumbs.db",
+    ".eslintcache",
+    ".Rhistory",
+    ".node_repl_history",
+]
+
 #maybe change reading system since chunk read will not be triggered mostly, unless really big file
 def chunk_read(file_path: str, chunk_size: int = 1024):
     while True:
@@ -45,10 +62,12 @@ def chunk_read(file_path: str, chunk_size: int = 1024):
 def read_file(file_path: str, allowed_files: List = allowed_files):
     if any(file_path.endswith(allowed_file) for allowed_file in allowed_files):
         content = ""
+        if any(file_path.endswith(dont_read) for dont_read in non_allowed_read):
+            return "--- FILE TOO LARGE / NO NEED TO READ ---"
         with open(file_path, "r", encoding = "utf-8") as file: #only reading here
             for chunk in chunk_read(file):
                 content += chunk
         file.close()
         if content == "":
-            return "---EMPTY/NON READABLE FILE---"
+            return "--- EMPTY/NON READABLE FILE ---"
         return content
