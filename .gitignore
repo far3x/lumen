@@ -1,5 +1,5 @@
 build/
 dist/
-lum.egg-info/
+pylumen.egg-info/
 __pycache__/
 venv/
