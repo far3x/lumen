@@ -137,7 +137,7 @@ Lumen is primarily a command-line tool (`lum`).
         ``lum -hd title``
    *   Hide both:
 
-        ``lum -hd intro,title``
+        lum -hd intro,title
 
 **9. Configure Lumen:**
    *   Open the configuration file (`config.json`) for editing:
@@ -146,7 +146,7 @@ Lumen is primarily a command-line tool (`lum`).
        *(This opens the file in your default editor. The file is located in your user's configuration directory, e.g., `~/.ptap/config.json` - this path might change to `~/.lumen/config.json` in a future rename)*
    *   Reset the configuration file to its default settings:
 
-        ``lum -r``
+        `lum -r`
 
 ---
 
