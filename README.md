@@ -78,7 +78,7 @@ Before installing Lumen, ensure you have the following installed and correctly c
 
 Install Lumen easily using pip:
 
-``pip install lum``
+`pip install lum`
 
 ---
 
@@ -89,17 +89,17 @@ Lumen is primarily a command-line tool (`lum`).
 **1. Generate Full Context for Current Directory (Output to Clipboard):**
    *Navigate to your project's root directory in your terminal and run:*
 
-    ``lum``
+    `lum`
    *(This is the default behavior. The complete, structured prompt including structure and file contents is copied to your clipboard. Suitable for smaller projects or general overview.)*
 
 **2. Generate Full Context for a Specific Project Path:**
 
-    ``lum /path/to/your/project``
+    `lum /path/to/your/project`
 
 **3. Generate Intelligent, Query-Specific Context: (coming soon, in development for now !)**
    *For larger projects, provide a natural language query to get only the most relevant code chunks:*
 
-    ``lum --query "Explain how users are authenticated"``
+    `lum --query "Explain how users are authenticated"`
    *This triggers the embedding-based retrieval.*
    *   **Indexing:** The *first time* you use `--query` on a project, Lumen will build a local index of your codebase (chunking files, generating embeddings). This takes time depending on project size and your hardware. Subsequent queries are fast.
    *   **Prompt:** The generated prompt will include your query, the project structure, and the content of the top relevant code chunks found.
@@ -107,42 +107,42 @@ Lumen is primarily a command-line tool (`lum`).
 **4. Force Re-indexing for Queries: (In dev too)**
    *If your code changes significantly after indexing, you might want to rebuild the index:*
 
-    ``lum --query "check payment processing logic" --reindex``
+    `lum --query "check payment processing logic" --reindex`
    *This clears the old index for the project and builds a new one.*
 
 **5. Control Number of Relevant Chunks (Query Mode): (In dev too)**
    *Specify how many top relevant code chunks to include in the prompt:*
 
-    ``lum --query "What are the main API endpoints?" --top-k 20``
+    `lum --query "What are the main API endpoints?" --top-k 20`
    *Overrides the default set in the configuration.*
 
 **6. Save Prompt to a Text File:**
    *Creates a `.txt` file in the analyzed project's root directory.*
 
-    ``lum -t my_project_prompt``
+    `lum -t my_project_prompt`
    *(This will create `my_project_prompt.txt`)*
 
 **7. Analyze a Public GitHub Repository:**
    *(Requires Git to be installed!)*
 
-    ``lum -g https://github.com/user/public-repository-name``
+    `lum -g https://github.com/user/public-repository-name`
    *(Lumen will clone the repo temporarily, generate the prompt (full dump or query-based if `--query` is also used), and then clean up the cloned repository.)*
 
 **8. Customize Output (Hide Elements):**
    *   Hide the default introduction text:
 
-        ``lum -hd intro``
+        `lum -hd intro`
    *   Hide the `--- File: path/to/file.py ---` titles (Not Recommended - can confuse AI, automatically hidden in `--query` mode):
 
-        ``lum -hd title``
+        `lum -hd title`
    *   Hide both:
 
-        lum -hd intro,title
+        `lum -hd intro,title`
 
 **9. Configure Lumen:**
    *   Open the configuration file (`config.json`) for editing:
 
-        ``lum -c``
+        `lum -c`
        *(This opens the file in your default editor. The file is located in your user's configuration directory, e.g., `~/.ptap/config.json` - this path might change to `~/.lumen/config.json` in a future rename)*
    *   Reset the configuration file to its default settings:
 
