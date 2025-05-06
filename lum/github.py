@@ -4,7 +4,7 @@ import requests
 import subprocess
 import stat
 import os
-from ptap.config import *
+from lum.config import *
 
 #i fixed few functions with ai, the simplest way possible, just bcs of permission errors when deleting the cloned repo :/
 
@@ -40,7 +40,7 @@ def check_repo(repo_link: str = None):
     if api_link:
         try:
             headers = {
-                'User-Agent': 'PTAP-Python-Script'
+                'User-Agent': 'LUM-Python-Script'
             }
 
             response = requests.get(url=api_link, timeout=10, headers=headers)
@@ -87,29 +87,29 @@ def download_repo(repo_link: str = None):
     if not clone_link:
         raise ValueError("Invalid or unsupported GitHub repository link format.")
 
-    #go to ptap config file
-    ptap_repo = get_config_directory()
+    #go to lum config file
+    lum_repo = get_config_directory()
     repo_name = clone_link.split("/")[-1].replace(".git", "")
     if not repo_name: 
         repo_name = clone_link.split("/")[-2] #trailing slash case
-    ptap_repo_name = os.path.join(ptap_repo, repo_name)
+    lum_repo_name = os.path.join(lum_repo, repo_name)
 
     #removing existing folder if already exists
-    if os.path.exists(ptap_repo_name):
-        print(f"Removing existing directory: {ptap_repo_name}")
-        remove_repo(ptap_repo_name)
+    if os.path.exists(lum_repo_name):
+        print(f"Removing existing directory: {lum_repo_name}")
+        remove_repo(lum_repo_name)
 
     #download with git clone using the parameter
-    command = ["git", "clone", clone_link, ptap_repo_name]
+    command = ["git", "clone", clone_link, lum_repo_name]
     try:
         subprocess.run(command, check=True, capture_output=True, text=True) #check will raise an error if there is one with the git clone command, didnt know
         #return the path of the folder to analyze
-        return ptap_repo_name
+        return lum_repo_name
     except subprocess.CalledProcessError as e:
         print(f"Git clone failed. Error: {e.stderr}")
-        if os.path.exists(ptap_repo_name):
+        if os.path.exists(lum_repo_name):
             print("Attempting cleanup of partially cloned folder...")
-            remove_repo(ptap_repo_name)
+            remove_repo(lum_repo_name)
         raise #force exception, didnt know this exists thats so nice
 
 

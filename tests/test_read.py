@@ -1,4 +1,4 @@
-from ptap import file_reader
+from lum import file_reader
 
 actual_content = """#LINE 1
 #line2

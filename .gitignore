@@ -1,5 +1,5 @@
 build/
 dist/
-ptap.egg-info/
+lum.egg-info/
 __pycache__/
 venv/

@@ -84,7 +84,7 @@ I will ask for help in the next prompt so you can assist me with this project.
 }
 
 
-config_folder = ".ptap"
+config_folder = ".lum"
 config_file = "config.json"
 
 #check if config exists, if not it creates it, otherwise will never change the parameters in case of pip update
@@ -119,7 +119,7 @@ def check_config():
         exit()
 
 def reset_config():
-    check_config() #in case user resets config for no reason before he uses ptap command normally, wont create conflicts
+    check_config() #in case user resets config for no reason before he uses lum command normally, wont create conflicts
     try:
         with open(get_config_file(), "w+") as config_file:
             json.dump(

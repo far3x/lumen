@@ -2,23 +2,23 @@ from setuptools import setup, find_packages
 import os
 
 setup(
-    name = "ptap",
-    version = "v1.2.1",
-    packages = find_packages(include = ["ptap", "ptap.*"]),
+    name = "lum",
+    version = "v1.0",
+    packages = find_packages(include = ["lum", "lum.*"]),
     install_requires = [
         "requests",
         "pyperclip",
     ],
     entry_points = {
         "console_scripts": [
-            "ptap=ptap.main:main",
+            "lum=lum.main:main",
         ],
     },
     author = "Far3k",
     author_email = "far3000yt@gmail.com",
-    description = "The best tool to generate AI prompts from code projects and make any AI understand a whole project!",
+    description = "Lumen: Intelligently prepares your codebase context for any LLM, solving context window limits with smart retrieval and providing deep project understanding.",
     long_description = open("README.md", encoding="utf-8").read() if os.path.exists("README.md") else "",    long_description_content_type = "text/markdown",
-    url = "https://github.com/Far3000-YT/PTAP",
+    url = "https://github.com/Far3000-YT/lumen",
     classifiers = [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

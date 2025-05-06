@@ -1,7 +1,7 @@
-from ptap.visualizer import *
-from ptap.assembly import *
-from ptap.config import *
-from ptap.github import *
+from lum.visualizer import *
+from lum.assembly import *
+from lum.config import *
+from lum.github import *
 
 from typing import List
 import json, os, platform, subprocess, argparse, pyperclip
@@ -50,7 +50,7 @@ def make_structure(path: str, skipped: List):
 #                                          #
 ############################################
 
-def ptap_command(args, isGitHub: bool = False, GitHubRoot: str = None):
+def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
     print("Launching...")
     root_path = args.path
     if isGitHub:
@@ -134,14 +134,14 @@ def main():
         "-hd",
         "--hide",
         metavar = "Element/Elements", #in help section will show elements instead of "HIDE"
-        help = "Hide elements manually like the intro (introdution text in the beginning of the prompt) or the title (will hide the names of each file, NOT RECOMMENDED IT WILL MOST LIKELY MAKE THE AI NOT UNDERSTAND) (seperate with commas, for example : 'ptap -hd intro, title')"
+        help = "Hide elements manually like the intro (introdution text in the beginning of the prompt) or the title (will hide the names of each file, NOT RECOMMENDED IT WILL MOST LIKELY MAKE THE AI NOT UNDERSTAND) (seperate with commas, for example : 'lum -hd intro, title')"
     )
 
     parser.add_argument( #done
         "-t",
         "--txt",
         metavar = "FileName",
-        help = "Specify the output file name (in a .txt file that will be in the root. If you don't use this argument, your content will be copied in your clipboard. For example, 'ptap -t prompt' will generate a file named 'prompt.txt' with the whole project in a structured prompt."
+        help = "Specify the output file name (in a .txt file that will be in the root. If you don't use this argument, your content will be copied in your clipboard. For example, 'lum -t prompt' will generate a file named 'prompt.txt' with the whole project in a structured prompt."
     )
 
     parser.add_argument(
@@ -162,7 +162,7 @@ def main():
         check_config()
         reset_config()
     
-    #idea for github import would be to git clone the project locally in ptap folder, then run the command there, then remove the downloaded folder.
+    #idea for github import would be to git clone the project locally in lum folder, then run the command there, then remove the downloaded folder.
     elif args.github: #if github link we go to this repo, take all the files and make an analysis
         git_exists = check_git()
         if git_exists == False:
@@ -173,7 +173,7 @@ def main():
         check_repo(github_link)
         if github_link:
             git_root = download_repo(github_link)
-            ptap_command(args = args, isGitHub = True, GitHubRoot = git_root)
+            lum_command(args = args, isGitHub = True, GitHubRoot = git_root)
             remove_repo(git_root)
         else:
             print("GitHub repo doesn't exist, please try again with a correct link (check that the repository is NOT private, and that you are connected to internet !)")
@@ -181,7 +181,7 @@ def main():
         
 
     else: #if not reset or config, main purpose of the script
-        ptap_command(args = args)
+        lum_command(args = args)
         
 
 if __name__ == "__main__":
