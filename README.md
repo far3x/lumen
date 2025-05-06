@@ -107,25 +107,25 @@ Lumen is primarily a command-line tool (`lum`).
 **4. Force Re-indexing for Queries: (In dev too)**
    *If your code changes significantly after indexing, you might want to rebuild the index:*
 
-    `lum --query "check payment processing logic" --reindex`
+        `lum --query "check payment processing logic" --reindex`
    *This clears the old index for the project and builds a new one.*
 
 **5. Control Number of Relevant Chunks (Query Mode): (In dev too)**
    *Specify how many top relevant code chunks to include in the prompt:*
 
-    `lum --query "What are the main API endpoints?" --top-k 20`
+        `lum --query "What are the main API endpoints?" --top-k 20`
    *Overrides the default set in the configuration.*
 
 **6. Save Prompt to a Text File:**
    *Creates a `.txt` file in the analyzed project's root directory.*
 
-    `lum -t my_project_prompt`
+        `lum -t my_project_prompt`
    *(This will create `my_project_prompt.txt`)*
 
 **7. Analyze a Public GitHub Repository:**
    *(Requires Git to be installed!)*
 
-    `lum -g https://github.com/user/public-repository-name`
+    	`lum -g https://github.com/user/public-repository-name`
    *(Lumen will clone the repo temporarily, generate the prompt (full dump or query-based if `--query` is also used), and then clean up the cloned repository.)*
 
 **8. Customize Output (Hide Elements):**
