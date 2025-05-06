@@ -50,12 +50,12 @@ Before installing Lumen, ensure you have the following installed and correctly c
         *   **Windows:** Download the installer from [python.org](https://www.python.org/downloads/windows/). **Crucially, during installation, ensure you check the box that says "Add Python to PATH"**. This makes `python` and `pip` commands available from any terminal window. If you missed this, you might need to reinstall or manually add Python to your system's Environment Variables.
         *   **macOS:** Python 3 is often pre-installed or easily available via Homebrew (``brew install python``). Ensure the Homebrew bin directory is in your PATH (usually set up automatically). You can verify Python and Pip availability by opening a new terminal window after installation.
         *   **Linux (Debian/Ubuntu):**
-            ```bash
+            ```
             sudo apt update
             sudo apt install python3 python3-pip
             ```
         *   **Linux (Fedora/CentOS/RHEL):**
-            ```bash
+            ```
             sudo dnf install python3 python3-pip
             # or
             sudo yum install python3 python3-pip
@@ -78,7 +78,7 @@ Before installing Lumen, ensure you have the following installed and correctly c
 
 Install Lumen easily using pip:
 
-```bash
+```
 pip install lum
 ```
 
@@ -91,21 +91,21 @@ Lumen is primarily a command-line tool (`lum`).
 **1. Generate Full Context for Current Directory (Output to Clipboard):**
    *Navigate to your project's root directory in your terminal and run:*
 
-    ```bash
+    ```
     lum
     ```
    *(This is the default behavior. The complete, structured prompt including structure and file contents is copied to your clipboard. Suitable for smaller projects or general overview.)*
 
 **2. Generate Full Context for a Specific Project Path:**
 
-    ```bash
+    ```
     lum /path/to/your/project
     ```
 
 **3. Generate Intelligent, Query-Specific Context: (coming soon, in development for now !)**
    *For larger projects, provide a natural language query to get only the most relevant code chunks:*
 
-    ```bash
+    ```
     lum --query "Explain how users are authenticated"
     ```
    *This triggers the embedding-based retrieval.*
@@ -115,7 +115,7 @@ Lumen is primarily a command-line tool (`lum`).
 **4. Force Re-indexing for Queries: (In dev too)**
    *If your code changes significantly after indexing, you might want to rebuild the index:*
 
-    ```bash
+    ```
     lum --query "check payment processing logic" --reindex
     ```
    *This clears the old index for the project and builds a new one.*
@@ -123,7 +123,7 @@ Lumen is primarily a command-line tool (`lum`).
 **5. Control Number of Relevant Chunks (Query Mode): (In dev too)**
    *Specify how many top relevant code chunks to include in the prompt:*
 
-    ```bash
+    ```
     lum --query "What are the main API endpoints?" --top-k 20
     ```
    *Overrides the default set in the configuration.*
@@ -131,7 +131,7 @@ Lumen is primarily a command-line tool (`lum`).
 **6. Save Prompt to a Text File:**
    *Creates a `.txt` file in the analyzed project's root directory.*
 
-    ```bash
+    ```
     lum -t my_project_prompt
     ```
    *(This will create `my_project_prompt.txt`)*
@@ -139,7 +139,7 @@ Lumen is primarily a command-line tool (`lum`).
 **7. Analyze a Public GitHub Repository:**
    *(Requires Git to be installed!)*
 
-    ```bash
+    ```
     lum -g https://github.com/user/repository-name
     ```
    *(Lumen will clone the repo temporarily, generate the prompt (full dump or query-based if `--query` is also used), and then clean up the cloned repository.)*
@@ -147,30 +147,30 @@ Lumen is primarily a command-line tool (`lum`).
 **8. Customize Output (Hide Elements):**
    *   Hide the default introduction text:
 
-        ```bash
+        ```
         lum -hd intro
         ```
    *   Hide the `--- File: path/to/file.py ---` titles (Not Recommended - can confuse AI, automatically hidden in `--query` mode):
 
-        ```bash
+        ```
         lum -hd title
         ```
    *   Hide both:
 
-        ```bash
+        ```
         lum -hd intro,title
         ```
 
 **9. Configure Lumen:**
    *   Open the configuration file (`config.json`) for editing:
 
-        ```bash
+        ```
         lum -c
         ```
        *(This opens the file in your default editor. The file is located in your user's configuration directory, e.g., `~/.ptap/config.json` - this path might change to `~/.lumen/config.json` in a future rename)*
    *   Reset the configuration file to its default settings:
 
-        ```bash
+        ```
         lum -r
         ```
 
