@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import os
 
 setup(
-    name = "lum",
+    name = "pylumen",
     version = "v1.0",
     packages = find_packages(include = ["lum", "lum.*"]),
     install_requires = [
