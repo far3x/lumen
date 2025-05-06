@@ -14,7 +14,7 @@ allowed_files = [
     ".swift", ".m", ".mm",
     ".pl", ".pm",
     ".lua",
-    ".r", ".R",
+    ".r", ".R", ".php",
     ".html", ".htm", ".xhtml", ".css", ".scss", ".sass", ".less", ".styl",
     ".hbs", ".ejs", ".pug", ".twig",
     ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env",

@@ -3,7 +3,7 @@ import os
 
 setup(
     name = "ptap",
-    version = "v1.2",
+    version = "v1.2.1",
     packages = find_packages(include = ["ptap", "ptap.*"]),
     install_requires = [
         "requests",
