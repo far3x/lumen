@@ -1,10 +1,8 @@
-<p align="center">
-  <h1 align="center">💡 Lumen - Illuminate Your Codebase for AI</h1>
-</p>
+💡 Lumen - Illuminate Your Codebase for AI</h1>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI version](https://badge.fury.io/py/lum.svg)](https://badge.fury.io/py/lum) <!-- Assuming 'lum' is the PyPI package name -->
-[![Python Version](https://img.shields.io/pypi/pyversions/lum.svg)](https://pypi.org/project/lum/) <!-- Assuming 'lum' is the PyPI package name -->
+[![PyPI version](https://badge.fury.io/py/pylumen.svg)](https://badge.fury.io/py/pylumen)
+[![Python Version](https://img.shields.io/pypi/pyversions/lum.svg)](https://pypi.org/project/pylumen/)
 
 ---
 
