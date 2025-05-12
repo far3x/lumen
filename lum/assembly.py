@@ -1,4 +1,4 @@
-from lum.file_reader import *
+from lum.smart_read import *
 from typing import List
 import os
 
@@ -22,18 +22,21 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = allowe
                     files_list[file_list_index] = file_root
     return files_list
 
+
 def add_intro(prompt: str, intro: str):
     prompt += intro + PROMPT_SEPERATOR
     return prompt
+
 
 def add_structure(prompt: str, json_structure: str):
     prompt += json_structure + PROMPT_SEPERATOR
     return prompt
 
+
 def add_files_content(prompt: str, files_root: dict, show_title: bool = True, title_text: str = None):
     #file title then file content added in the prompt
     for file_name, file_path in files_root.items():
-        if show_title: 
+        if show_title:
             prompt += title_text.format(file = file_name) + PROMPT_SEPERATOR #specify in the prompt the path and which file we're reading
         prompt += read_file(file_path) + PROMPT_SEPERATOR #specify in the prompt the content of that file
     return prompt

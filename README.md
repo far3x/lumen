@@ -97,7 +97,7 @@ Lumen is primarily a command-line tool (`lum`).
 **3. Generate Intelligent, Query-Specific Context: (coming soon, in development for now !)**
    *For larger projects, provide a natural language query to get only the most relevant code chunks:*
 
-    `lum --query "Explain how users are authenticated"`
+`lum --query "Explain how users are authenticated"`
    *This triggers the embedding-based retrieval.*
    *   **Indexing:** The *first time* you use `--query` on a project, Lumen will build a local index of your codebase (chunking files, generating embeddings). This takes time depending on project size and your hardware. Subsequent queries are fast.
    *   **Prompt:** The generated prompt will include your query, the project structure, and the content of the top relevant code chunks found.

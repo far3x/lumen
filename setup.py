@@ -3,11 +3,12 @@ import os
 
 setup(
     name = "pylumen",
-    version = "v0.0",
+    version = "v0.1",
     packages = find_packages(include = ["lum", "lum.*"]),
     install_requires = [
         "requests",
         "pyperclip",
+        "chardet",
     ],
     entry_points = {
         "console_scripts": [

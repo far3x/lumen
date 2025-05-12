@@ -17,69 +17,15 @@ I will ask for help in the next prompt so you can assist me with this project.
     "title_text": "File : {file}", #{file} will be replaced by the file name, KEEP IT PLEASE
     "show_title": True,
     "skipped_folders": [
-        ".git",
-        "__pycache__",
-        "node_modules",
-        "venv",
-        ".venv",
-        ".svn",
-        ".hg",
-        "obj",
-        "bin",
-        "build",
-        "dist",
-        "target",
-        ".gradle",
-        ".idea",
-        ".vscode",
-        "*.egg-info",
-        "*.dist-info",
-        "logs",
-        "log",
-        "tmp",
-        "temp",
-        ".pytest_cache",
-        ".mypy_cache",
-        ".cache",
-        "vendor",
-        "deps",
-        ".next",
-        ".nuxt",
-        ".svelte-kit",
-        ".angular",
-        "coverage",
-        "site",
-        "_site",
-        ".sass-cache",
-        "bower_components",
-        "jspm_packages",
-        "web_modules",
-        "*.pyc",
-        "*.pyo",
-        "*.swp",
-        "*.swo",
-        "*~",
-        ".DS_Store",
-        "Thumbs.db",
-        "DerivedData",
-        ".settings",
-        ".classpath",
-        ".project",
-        "nbproject",
-        "*.sublime-workspace",
-        "*.sublime-project",
-        ".terraform",
-        "*.tfstate",
-        "*.tfstate.backup",
-        ".serverless",
-        ".parcel-cache",
-        "storage/framework",
-        "storage/logs",
-        "bootstrap/cache",
-        "public/build",
-        "public/hot",
-        "public/storage",
-        "var"
+        ".git", "__pycache__", "node_modules", "venv", ".venv", ".svn", ".hg", "obj", "bin",
+        "build", "dist", "target", ".gradle", ".idea", ".vscode", ".egg-info", ".dist-info",
+        "logs", "log", "tmp", "temp", ".pytest_cache", ".mypy_cache", ".cache", "vendor",
+        "deps", ".next", ".nuxt", ".svelte-kit", ".angular", "coverage", "site", "_site",
+        ".sass-cache", "bower_components", "jspm_packages", "web_modules", ".pyc", ".pyo",
+        ".swp", ".swo", "~", ".DS_Store", "Thumbs.db", "DerivedData", ".settings", ".classpath",
+        ".project", "nbproject", ".sublime-workspace", ".sublime-project", ".terraform",
+        ".tfstate", ".tfstate.backup", ".serverless", ".parcel-cache", "storage/framework",
+        "storage/logs", "bootstrap/cache", "public/build", "public/hot", "public/storage", "var"
     ]
 }
 
@@ -99,8 +45,8 @@ def check_config():
         os.makedirs(get_config_directory())
 
     #same than above but with file configuration
-    try: 
-        with open(get_config_file(), "r"): 
+    try:
+        with open(get_config_file(), "r"):
             pass
             #do nothing if file exists
 
@@ -114,7 +60,7 @@ def check_config():
         print("Configuration files initialized")
         config_file.close()
 
-    except Exception as error: 
+    except Exception as error:
         print(f"Exception when file read : {error}")
         exit()
 
