@@ -22,16 +22,13 @@ Lumen is your intelligent CLI companion that automatically scans, structures, an
 
 ## Why Lumen?
 
-*   🚀 **Effortless Context Generation:** Automatically gathers and structures your entire project – no more manual drudgery.
-*   👁️ **Crystal-Clear Project Overview:** Provides a mandatory `--- PROJECT STRUCTURE ---` JSON map, giving your AI an instant architectural blueprint.
-*   🧠 **Smart File Handling:** Intelligently reads various file types (including `.ipynb` notebooks) with automatic encoding detection.
-*   🔧 **Fine-Grained Control:** Precisely configure included/excluded folders and *specific files* via an easy-to-edit JSON configuration (`~/.lum/config.json`).
-*   🛡️ **100% Private & Secure:** Processes everything locally. Your code never leaves your machine during context generation for local projects.
-*   📋 **Flexible Output:** Instantly copy the complete prompt to your clipboard or save it as a `.txt` file.
-*   🌐 **GitHub Repo Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and cleanup.
-*   📊 **Token Insights (New!):** Use the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), helping you optimize large contexts.
-*   ⚙️ **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
-*   ✅ **Reliable & Tested:** Backed by a comprehensive test suite.
+* 🚀 - **Effortless Context Generation:** Automatically gathers and structures your entire project, no more manual drudgery.
+* 🧠 - **Smart File Handling:** Intelligently reads various file types (including `.ipynb` notebooks) with automatic encoding detection.
+* ⚙️ - **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
+* 🌐 - **GitHub Repo Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and cleanup.
+* 🛡️ - **100% Private & Secure:** Processes everything locally. Your code never leaves your machine during context generation for local projects.
+* 📊 - **Token Insights (New !):** Use the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), helping you optimize large contexts.
+* ✅ - **Reliable & Tested:** Backed by a comprehensive test suite.
 
 ---
 
@@ -133,7 +130,7 @@ Stay tuned for these and more improvements!
 
 ---
 
-## ⭐ Love Lumen? Give us a Star!
+## Love Lumen? Give us a Star!
 
 If Lumen helps you supercharge your AI workflows, please consider starring the project on GitHub! It's a great way to show your support and helps others discover Lumen.
 
@@ -144,14 +141,6 @@ If Lumen helps you supercharge your AI workflows, please consider starring the p
 ## Contributing
 
 We welcome contributions, issues, and feature requests! Check out the [issues page](https://github.com/Far3000-YT/lumen/issues) or submit a pull request. See `CONTRIBUTING.md` for more details. Let's make Lumen even better, together!
-
----
-
-## Limitations
-
-*   **AI Interpretation:** The quality of the AI's response still ultimately depends on the capabilities of the LLM you use.
-*   **Very Large Projects:** While Lumen structures the output, providing the full content of extremely massive projects may still exceed context window limits. The `--leaderboard` feature can help identify large files to manage this.
-*   **File Types:** Primarily designed for text-based source code and configuration files. Binary files or unusual encodings not handled by `chardet` may not be read correctly.
 
 ---
 
@@ -169,7 +158,3 @@ Developed by **Far3k**
 *   **Email:** far3000yt@gmail.com
 *   **Discord:** @far3000
 *   **X (Twitter):** [@0xFar3000](https://twitter.com/0xFar3000)
-
----
-
-**Empower your AI with the structured context it needs. Install Lumen today.**
