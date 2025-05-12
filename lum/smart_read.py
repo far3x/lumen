@@ -1,30 +1,16 @@
 from typing import List
-import json, chardet
+from lum.config import *
+import json, chardet, tiktoken
 
 
 #skibidi (sorry if u find this)
-#will put in config soon
-allowed_files = [
-    ".py", ".pyi", ".r", ".R", ".php", ".ipynb", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs",
-    ".java", ".kt", ".kts", ".scala", ".groovy", ".c", ".cpp", ".cc", ".h", ".hpp", ".hh",
-    ".cs", ".vb", ".go", ".rs", ".rb", ".rbw", ".swift", ".m", ".mm", ".pl", ".pm", ".lua",
-    ".html", ".htm", ".xhtml", ".css", ".scss", ".sass", ".less", ".hbs", ".ejs", ".pug",
-    ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env", ".md",
-    ".markdown", ".rst", "Makefile", ".cmake", ".bazel", "BUILD", "WORKSPACE", ".txt",
-    "package.json", "package-lock.json", "yarn.lock", "bower.json", ".babelrc", ".eslintrc",
-    ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".prettierrc", ".prettierrc.js",
-    ".prettierrc.json", ".prettierrc.yaml", "webpack.config.js", "rollup.config.js", ".gitignore"
-    "requirements.txt", "Pipfile", "Pipfile.lock", "setup.py", "pyproject.toml", ".pylintrc",
-    "Gemfile", "Gemfile.lock", "build.gradle", "pom.xml", "tsconfig.json", ".styl", ".twig",
-    "composer.json", "composer.lock", "Cargo.toml", "Cargo.lock", ".csv", ".tsv", ".sql", ".gd"
-]
 
-#same
-non_allowed_read = [
-    "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock",
-    "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock",
-    ".DS_Store", "Thumbs.db", ".eslintcache", ".Rhistory", ".node_repl_history",
-]
+def get_files_parameters():
+    base_parameters = {
+        "allowed_files": get_allowed_file_types(),
+        "non_allowed_read": get_skipped_files()
+    }
+    return base_parameters
 
 
 def chunk_read(file_path: str, chunk_size: int = 1024):
@@ -70,7 +56,37 @@ def detect_encoding(file_path: str) -> str:
     return 'utf-8' if encoding is None or encoding.lower() == 'ascii' else encoding
 
 
-def read_file(file_path: str, allowed_files: List = allowed_files):
+def rank_tokens(files_root: dict, top: int):
+    encoding = tiktoken.get_encoding("cl100k_base")
+    token_counts = []
+
+    print("\nCalculating token counts...")
+
+    for file_name, file_path in files_root.items():
+        content = read_file(file_path)
+
+        try:
+            tokens = encoding.encode(content)
+            token_count = len(tokens)
+            token_counts.append((token_count, file_name))
+        except Exception as e:
+            print(f"Error encoding file {file_name}: {e}")
+
+    token_counts.sort(key=lambda item: item[0], reverse=True)
+
+    print(f"\nTop {min(top, len(token_counts))} Most Token-Consuming Files :")
+
+    if not token_counts:
+        print("No readable files found to rank.")
+    else:
+        for i, (count, name) in enumerate(token_counts[:top]):
+            print(f"{i + 1}. {name}: {count} tokens")
+
+
+def read_file(file_path: str, allowed_files: List = None):
+    if allowed_files is None:
+        allowed_files = get_files_parameters()["allowed_files"]
+
     if not any(file_path.endswith(allowed_file) for allowed_file in allowed_files):
         return "--- NON READABLE FILE ---"
     
@@ -90,7 +106,7 @@ def read_file(file_path: str, allowed_files: List = allowed_files):
             return ERROR_OUTPUT
 
     #skipped files (large files, module files... etc that are not needed)
-    if any(file_path.endswith(dont_read) for dont_read in non_allowed_read):
+    if any(file_path.endswith(dont_read) for dont_read in get_files_parameters()["non_allowed_read"]):
         return LARGE_OUTPUT
     
     #rest, any allowed file

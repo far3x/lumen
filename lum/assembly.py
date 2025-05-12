@@ -1,11 +1,14 @@
-from lum.smart_read import *
+from lum.smart_read import read_file
 from typing import List
 import os
 
 
 PROMPT_SEPERATOR = "\n\n\n"
 
-def get_files_root(main_root: str, skipped_folders: List, allowed: List = allowed_files):
+def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
+    if allowed is None:
+        from lum.smart_read import get_files_parameters
+        allowed = get_files_parameters()["allowed_files"]
     files_list = {}
     min_level = 0
     for root, _, files in os.walk(main_root):
@@ -29,14 +32,14 @@ def add_intro(prompt: str, intro: str):
 
 
 def add_structure(prompt: str, json_structure: str):
+    prompt += "--- PROJECT STRUCTURE ---" + PROMPT_SEPERATOR
     prompt += json_structure + PROMPT_SEPERATOR
     return prompt
 
 
-def add_files_content(prompt: str, files_root: dict, show_title: bool = True, title_text: str = None):
+def add_files_content(prompt: str, files_root: dict, title_text: str = None):
     #file title then file content added in the prompt
     for file_name, file_path in files_root.items():
-        if show_title:
-            prompt += title_text.format(file = file_name) + PROMPT_SEPERATOR #specify in the prompt the path and which file we're reading
+        prompt += title_text.format(file = file_name) + PROMPT_SEPERATOR #specify in the prompt the path and which file we're reading
         prompt += read_file(file_path) + PROMPT_SEPERATOR #specify in the prompt the content of that file
     return prompt

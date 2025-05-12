@@ -1,3 +1,4 @@
 requests
 pyperclip
 chardet
+tiktoken

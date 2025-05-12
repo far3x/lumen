@@ -66,6 +66,7 @@ def check_git():
     return True
 
 
+#this was a pain in the ass
 def remove_readonly(func, path, excinfo):
     exc_value = excinfo[1]
     if isinstance(exc_value, PermissionError) or \
