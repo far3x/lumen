@@ -82,8 +82,17 @@ def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
 
 
     if output_file is None:
-        pyperclip.copy(structure)
-        print("Prompt copied to clipboard.")
+        try:
+            pyperclip.copy(structure)
+            print("Prompt copied to clipboard.\nIf you encounter a very big codebase, try to get a '.txt' output for better performances (clipboard won't make your pc lag).")
+        #non-windows case, where the clipboard won't work on all containers because of some limitations. will try to find a LIGHT advanced fix asap (tkinter is a possibility but too large for a single module where we just need clipboard support)
+        except pyperclip.PyperclipException as e:
+            try:
+                with open("prompt.txt", "w+", encoding="utf-8") as file:
+                    file.write(structure)
+                print("Copy to clipboard failed. Output is done in the root, as 'prompt.txt', to fix this please look at the README documentation (2 commands to fix this for most linux cases, install xsel or xclip).")
+            except Exception as e:
+                print(f"Error saving prompt to file {output_path}: {e}")
 
     elif output_file is not None:
         output_path = os.path.join(root_path, f"{output_file}.txt")
@@ -93,8 +102,6 @@ def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
             print(f"Prompt saved to {output_path}")
         except Exception as e:
             print(f"Error saving prompt to file {output_path}: {e}")
-    
-    print("Done !")
 
 
 def lum_github(args):
