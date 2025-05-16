@@ -1,5 +1,6 @@
 from typing import List
 from lum.config import *
+from lum.gitignore import *
 import json, chardet, tiktoken
 
 
@@ -84,6 +85,7 @@ def rank_tokens(files_root: dict, top: int):
 
 
 def read_file(file_path: str, allowed_files: List = None):
+    #cant define allowed files in the function, cuz if u have an old version will crash (parameters out of date = crash) :(
     if allowed_files is None:
         allowed_files = get_files_parameters()["allowed_files"]
 
@@ -106,7 +108,12 @@ def read_file(file_path: str, allowed_files: List = None):
             return ERROR_OUTPUT
 
     #skipped files (large files, module files... etc that are not needed)
-    if any(file_path.endswith(dont_read) for dont_read in get_files_parameters()["non_allowed_read"]):
+    if gitignore_exists(""):
+        skipped_files, _ = gitignore_skipping() #skipped_folders never used here, maybe can optimize later that
+    else:
+        skipped_files = get_files_parameters()["non_allowed_read"]
+
+    if any(file_path.endswith(dont_read) for dont_read in skipped_files):
         return LARGE_OUTPUT
     
     #rest, any allowed file

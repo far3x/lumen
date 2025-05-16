@@ -1,4 +1,5 @@
 from lum.smart_read import read_file
+from lum.gitignore import *
 from typing import List
 import os
 
@@ -9,9 +10,17 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
     if allowed is None:
         from lum.smart_read import get_files_parameters
         allowed = get_files_parameters()["allowed_files"]
+    
+    #if gitignore, add skipped folders to existing skipped folder file
+    #print("3 - ", gitignore_exists("")) #debug
+    if gitignore_exists(""):
+        _, skipped_folders = gitignore_skipping() #skipped_files not used here then, so maybe optimization incoming !
+    #print("4 - ", skipped_folders) #debug
+
     files_list = {}
     min_level = 0
     for root, _, files in os.walk(main_root):
+        #print("5 - ", root) #debug
         if any(root.endswith(folder) for folder in skipped_folders):
             _[:] = []
             continue
