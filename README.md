@@ -4,7 +4,7 @@
 [![Downloads](https://static.pepy.tech/badge/pylumen)](https://pepy.tech/project/pylumen)
 [![Python Version](https://img.shields.io/pypi/pyversions/pylumen.svg)](https://pypi.org/project/pylumen/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/Far3000-YT/lumen.svg?style=social&label=Star&maxAge=2592000)](https://github.com/Far3000-YT/lumen/stargazers/)
+[![GitHub stars](https://img.shields.io/github/stars/Far3000-YT/lumen.svg?style=social&label=Star&maxAge=14400)](https://github.com/Far3000-YT/lumen/stargazers/)
 
 ---
 
