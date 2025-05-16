@@ -1,9 +1,13 @@
 import os
+from lum.gitignore import *
 from typing import List
 
 def get_project_structure(root_path: str, skipped_folders: List):
     root_path_name = "".join(root_path.split(os.sep)[-1]) + "/"
     structure = {root_path_name: {}}
+
+    if gitignore_exists(""):
+        _, skipped_folders = gitignore_skipping()
 
     for root, directories, files in os.walk(root_path, topdown = True):
         if any(root.endswith(folder) for folder in skipped_folders):
