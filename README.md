@@ -22,13 +22,19 @@ Lumen is your intelligent CLI companion that automatically scans, structures, an
 
 ## Why Lumen?
 
-* 🚀 - **Effortless Context Generation:** Automatically gathers and structures your entire project, no more manual drudgery.
-* 🧠 - **Smart File Handling:** Intelligently reads various file types (including `.ipynb` notebooks) with automatic encoding detection.
-* ⚙️ - **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
-* 🌐 - **GitHub Repo Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and cleanup.
-* 🛡️ - **100% Private & Secure:** Processes everything locally. Your code never leaves your machine during context generation for local projects.
-* 📊 - **Token Insights (New !):** Use the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), helping you optimize large contexts.
-* ✅ - **Reliable & Tested:** Backed by a comprehensive test suite.
+* **Effortless Context Generation:** Automatically gathers and structures your entire project, no more manual drudgery.
+
+* **Smart File Handling:** Intelligently reads various file types (including `.ipynb` notebooks) with automatic encoding detection.
+
+* **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
+
+* **GitHub Repo Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and cleanup.
+
+* **100% Private & Secure:** Processes everything locally. Your code never leaves your machine during context generation for local projects.
+
+* **Token Insights (New !):** Use the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), helping you optimize large contexts.
+
+* **Reliable & Tested:** Backed by a comprehensive test suite.
 
 ---
 
