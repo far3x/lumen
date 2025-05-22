@@ -5,36 +5,33 @@ from lum.github import *
 from lum.smart_read import *
 
 from typing import List
-import json, os, platform, subprocess, argparse, pyperclip
+import json, os, sys, platform, subprocess, argparse, pyperclip
 
 #get parameters initially from file
 def get_parameters():
     base_parameters = {
         "intro_text": get_intro(),
         "title_text": get_title(),
-        "skipped_folders": get_skipped_folders(), #more soon
+        "skipped_folders": get_skipped_folders(),
     }
     return base_parameters
 
 
 #all changing parameters
-
 def change_parameters():
     if platform.system() == "Windows":
         os.startfile(get_config_file())
-
     elif platform.system() == "Darwin":
         subprocess.Popen(["open", get_config_file()])
-
     else:
         subprocess.Popen(["xdg-open", get_config_file()])
 
 
 def make_structure(path: str, skipped: List):
     #when user types a path, we use this function with an argument, otherwise no argument and get automatically the path
-    data = json.dumps( 
+    data = json.dumps(
         get_project_structure(
-            root_path = path, 
+            root_path = path,
             skipped_folders = skipped
         ),
         indent = 4,
@@ -42,43 +39,55 @@ def make_structure(path: str, skipped: List):
     return data
 
 
-################################
-# MEOW XD sorry if u read this #
-################################
-
-
 def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
     print("Launching...")
     root_path = args.path
+
     if isGitHub:
         if GitHubRoot:
             root_path = GitHubRoot
+
         else:
             print("The path to the GitHub repo was not found!")
-            exit()
+            sys.exit(1)
 
-    if args.txt:
-        output_file = args.txt
-    else:
-        output_file = None
+    if args.txt: output_file = args.txt
+    else: output_file = None
 
     check_config() #in case of first run, will automatically add config files etc
     base_parameters = get_parameters()
 
+    #used parameters, read ONCE each parameter, no more -> output should be :
+    #x2 skipped folders, x2 skipped files, x1 intro, x1 title, x1 allowed file types ---- OBJECTIVE NOT MET BUT ALMOST
+    #before : was this but, the higher the folders = more iterations for reading files
+    #this is the best time optimization, and was the most consuming process
+    #this + not forcing encoding detection = best possible performances (if we dont count python compilers ahah)
+    
+    #went from reading parameters once every file read, to once BEFORE, now reading files "only" 18 times total
+    #this is optimized and stable, wont change unless i really want that ms difference
+    #(it won't rly change anything to read 3.5 times more basically !)
+    intro_text = base_parameters["intro_text"]
 
-    files_root = get_files_root(root_path, base_parameters["skipped_folders"])
+    if gitignore_exists(""): skipped_files, _ = gitignore_skipping() #skipped_folders never used here, maybe can optimize later that
+    else: skipped_files = get_files_parameters()["non_allowed_read"]
 
+    allowed_files = get_files_parameters()["allowed_files"]
+
+    skipped_folders = base_parameters["skipped_folders"]
+
+    files_root = get_files_root(root_path, skipped_folders)
+    title_text = base_parameters["title_text"]
 
     #if ranking enabled, use the ranking in backend to show top 20 most consuming files in term of token by default
     if args.leaderboard is not None:
-        rank_tokens(files_root, args.leaderboard)
+        rank_tokens(files_root, args.leaderboard, allowed_files = allowed_files, skipped_files = skipped_files)
 
 
     #STRUCTURE, MOST IMPORTANT FOR PROMPT
     structure = ""
-    structure = add_intro(structure, base_parameters["intro_text"])
-    structure = add_structure(structure, make_structure(root_path, get_parameters()["skipped_folders"]))
-    structure = add_files_content(structure, files_root, title_text = base_parameters["title_text"])
+    structure = add_intro(structure, intro_text)
+    structure = add_structure(structure, make_structure(root_path, skipped_folders))
+    structure = add_files_content(structure, files_root, title_text = title_text, allowed_files = allowed_files, skipped_files = skipped_files)
 
 
     if output_file is None:
@@ -107,7 +116,7 @@ def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
 def lum_github(args):
     git_exists = check_git()
     if git_exists == False:
-        exit()
+        sys.exit(1)
 
     github_link = args.github
     check_repo(github_link)
@@ -116,19 +125,20 @@ def lum_github(args):
         try:
             git_root = download_repo(github_link)
             lum_command(args = args, isGitHub = True, GitHubRoot = git_root)
+
         finally:
             git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-1].replace(".git", ""))
             if not git_root_to_remove:
-                 git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-2])
+                git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-2])
             remove_repo(git_root_to_remove)
     else:
         print("GitHub repo doesn't exist, please try again with a correct link (check that the repository is NOT private, and that you are connected to internet !)")
-        exit()
+        sys.exit(1)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description = "The best tool to generate AI prompts from code projects and make any AI understand a whole project!"
+        description = "The best tool to generate AI prompts from code projects, in a single command !"
     )
 
     parser.add_argument(
@@ -188,8 +198,7 @@ def main():
         check_config()
         reset_config()
     
-    #idea for github import would be to git clone the project locally in lum folder, then run the command there, then remove the downloaded folder.
-    elif args.github: #if github link we go to this repo, take all the files and make an analysis
+    elif args.github: #if github link we go to the repo, parse the link to make it usable for the api call, then take all the files and make an analysis
         lum_github(args = args)
 
     else: #if not reset or config, main purpose of the script

@@ -17,17 +17,20 @@ $$**//\\\ will the double slash show as a single slash or as a double when read
 #<>²²<([])>
 
 
-#i think thats enough to read, now we test"""
+#i think thats enough to read, now we test
+
+#😃😃🥲🥲🥲🥲🥲😭😭"""
 
 
 
 
 content = smart_read.read_file("tests/file_to_read.py")
-print("Test 1")
+print("Test 1 - no output = good")
 assert content == actual_content, f"Content different ! Content : {content}"
 #if no output, then the read file was working well !
 
 ipynb = smart_read.read_file("tests/test_ipynb.ipynb")
-print("Test 2")
+print("Test 2 - output below (ipynb file showcase)")
 print(ipynb)
 #make sure the ipynb file clearly shows the python cells + markdowns, and nothing else (no graphs or wtv)
+#used matplotlib in the .ipynb file to validate the fact it won't read graphs

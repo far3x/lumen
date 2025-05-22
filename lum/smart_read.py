@@ -4,8 +4,6 @@ from lum.gitignore import *
 import json, chardet, tiktoken
 
 
-#skibidi (sorry if u find this)
-
 def get_files_parameters():
     base_parameters = {
         "allowed_files": get_allowed_file_types(),
@@ -39,17 +37,11 @@ def read_ipynb(file_path: str, cell_seperator: str = None) -> str:
 
 #auto encoding detection
 #can be used as a seperate package (import pylumen / pylumen.detect_encoding(file_path))
+#if fails to read as utf-8, force the encoding detection (better to avoid wrong encoding detection + will improve performances by alot)
 def detect_encoding(file_path: str) -> str:
-    if file_path.lower().endswith(".md") or file_path.lower().endswith(".txt"):
-        #md/txt files hould be set on utf-8
-        #chardet detects it as the wrong encoding XD, maybe ill write my own encoding library who knows
-        return 'utf-8'
-    
     with open(file_path, 'rb') as f:
-        sample = f.read(4 * 1024)
-        #first 4kb, the less we read the faster
-        #this function makes the main function take time to output with a large amount of files :( 
-        #(will optimize soon !)
+        sample = f.read(1 * 1024)
+        #first kb, the less we read the faster
     
     result = chardet.detect(sample)
     encoding = result['encoding']
@@ -57,14 +49,16 @@ def detect_encoding(file_path: str) -> str:
     return 'utf-8' if encoding is None or encoding.lower() == 'ascii' else encoding
 
 
-def rank_tokens(files_root: dict, top: int):
+def rank_tokens(files_root: dict, top: int, allowed_files: List = None, skipped_files: List = None):
+    #function used when calling -l or --leaderboard parameter -> will show by default
+    #the top 20 most token consuming files, tokens calculated via the tiktoken module
     encoding = tiktoken.get_encoding("cl100k_base")
     token_counts = []
 
     print("\nCalculating token counts...")
 
     for file_name, file_path in files_root.items():
-        content = read_file(file_path)
+        content = read_file(file_path, allowed_files = allowed_files, skipped_files = skipped_files)
 
         try:
             tokens = encoding.encode(content)
@@ -84,10 +78,10 @@ def rank_tokens(files_root: dict, top: int):
             print(f"{i + 1}. {name}: {count} tokens")
 
 
-def read_file(file_path: str, allowed_files: List = None):
+def read_file(file_path: str, allowed_files: List = None, skipped_files: List = None):
     #cant define allowed files in the function, cuz if u have an old version will crash (parameters out of date = crash) :(
-    if allowed_files is None:
-        allowed_files = get_files_parameters()["allowed_files"]
+    #if allowed_files is None:
+    #    allowed_files = get_files_parameters()["allowed_files"]
 
     if not any(file_path.endswith(allowed_file) for allowed_file in allowed_files):
         return "--- NON READABLE FILE ---"
@@ -108,20 +102,26 @@ def read_file(file_path: str, allowed_files: List = None):
             return ERROR_OUTPUT
 
     #skipped files (large files, module files... etc that are not needed)
-    if gitignore_exists(""):
-        skipped_files, _ = gitignore_skipping() #skipped_folders never used here, maybe can optimize later that
-    else:
-        skipped_files = get_files_parameters()["non_allowed_read"]
+    
 
     if any(file_path.endswith(dont_read) for dont_read in skipped_files):
         return LARGE_OUTPUT
     
     #rest, any allowed file
     try:
-        #print("DEBUG - " + detect_encoding(file_path)) #used this to fix readme utf issue, also fixed folders being taken into account that should not :skull:
-        with open(file_path, "r", encoding = detect_encoding(file_path = file_path)) as file: #only reading here
+        with open(file_path, "r", encoding = 'utf-8') as file: #force utf-8 read, more optimized in general
             for chunk in chunk_read(file):
                 content += chunk
+
+    except UnicodeDecodeError: #if fail, will try to find encoding, rare case should happen once every 100 files or even lower
+        try:
+            with open(file_path, "r", encoding = detect_encoding(file_path = file_path)) as file:
+                for chunk in chunk_read(file):
+                    content += chunk
+
+        except Exception as e:
+            print(f"Error: An unexpected error occurred while reading {file_path} with encoding detection. If this happens, please try making an Issue on GitHub. Skipping file. Error: {e}")
+            return ERROR_OUTPUT
         
     except Exception as e:
         print(f"Error: An unexpected error occurred while reading {file_path}. Skipping file. Error: {e}")

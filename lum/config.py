@@ -4,7 +4,7 @@
 
 #all the project SHOULD BE os proof, if you notice something is not OS proof, please create an issue :)
 
-import os, json
+import os, json, sys
 
 
 EXPECTED_CONFIG_KEYS = [
@@ -51,13 +51,13 @@ I will ask for help in the next prompt so you can assist me with this project.
         ".cs", ".vb", ".go", ".rs", ".rb", ".rbw", ".swift", ".m", ".mm", ".pl", ".pm", ".lua",
         ".html", ".htm", ".xhtml", ".css", ".scss", ".sass", ".less", ".hbs", ".ejs", ".pug",
         ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env", ".md",
-        ".markdown", ".rst", "Makefile", ".cmake", ".bazel", "BUILD", "WORKSPACE", ".txt",
+        ".markdown", ".rst", "Makefile", ".cmake", ".bazel", "BUILD", "WORKSPACE", ".txt", ".gd",
         "package.json", "package-lock.json", "yarn.lock", "bower.json", ".babelrc", ".eslintrc",
         ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".prettierrc", ".prettierrc.js",
         ".prettierrc.json", ".prettierrc.yaml", "webpack.config.js", "rollup.config.js", ".gitignore"
         "requirements.txt", "Pipfile", "Pipfile.lock", "setup.py", "pyproject.toml", ".pylintrc",
         "Gemfile", "Gemfile.lock", "build.gradle", "pom.xml", "tsconfig.json", ".styl", ".twig",
-        "composer.json", "composer.lock", "Cargo.toml", "Cargo.lock", ".csv", ".tsv", ".sql", ".gd"
+        "composer.json", "composer.lock", "Cargo.toml", "Cargo.lock", ".csv", ".tsv", ".sql"
     ]
 }
 
@@ -72,14 +72,11 @@ config_file = "config.json"
 #config files management
 #if config folder or file doesnt exist, create it, same if config file is outdated, auto reset
 def check_config():
-    config_dir = get_config_directory()
-    config_path = get_config_file()
+    config_dir, config_path = get_config_directory(), get_config_file()
+    config_needs_creation_or_reset, config_data = False, {}
 
     if not os.path.exists(config_dir):
         os.makedirs(config_dir)
-
-    config_needs_creation_or_reset = False
-    config_data = {}
 
     if os.path.exists(config_path):
         try:
@@ -90,10 +87,9 @@ def check_config():
             if not all(key in config_data for key in EXPECTED_CONFIG_KEYS):
                 config_needs_creation_or_reset = True
 
-        except json.JSONDecodeError:
-            config_needs_creation_or_reset = True
         except Exception as e:
             config_needs_creation_or_reset = True
+
     else:
         config_needs_creation_or_reset = True
 
@@ -106,13 +102,14 @@ def check_config():
                     indent = 4
                 )
             if not os.path.exists(config_path) or (os.path.exists(config_path) and not config_data):
-                 print("Configuration files initialized.")
+                print("Configuration files initialized.")
+
         except Exception as error:
-            print(f"Error writing config file: {error}")
-            exit()
+            print(f"Config file not found or could not be modified - error : {error}")
+            sys.exit(1)
+
 
 def reset_config():
-    check_config() #in case user resets config for no reason before he uses lum command normally, wont create conflicts
     try:
         with open(get_config_file(), "w+") as config_file:
             json.dump(
@@ -124,8 +121,8 @@ def reset_config():
         config_file.close()
     
     except Exception as error:
-        print(f"Exception when file read : {error}")
-        exit()
+        print(f"Config file not found or could not be modified - error : {error}")
+        sys.exit(1)
 
 
 #get directories and files for config initialization or reading
@@ -136,8 +133,6 @@ def get_config_file():
     return str(os.path.join(get_config_directory(), config_file))
 
 
-#get config infos
-#redondant, fix soon ?
 def get_intro():
     with open(get_config_file(), "r") as data:
         d = json.load(data)

@@ -3,7 +3,7 @@ import os
 
 setup(
     name = "pylumen",
-    version = "v0.3",
+    version = "v0.4", #will remove "v" soon, in official release -> 1.0
     packages = find_packages(include = ["lum", "lum.*"]),
     install_requires = [
         "requests",
