@@ -1,4 +1,5 @@
-💡 Lumen - Supercharge Your AI with Perfect Code Context</h1>
+Lumen - Supercharge Your AI with Perfect Code Context
+====================================================
 
 [![PyPI version](https://badge.fury.io/py/pylumen.svg)](https://badge.fury.io/py/pylumen)
 [![Downloads](https://static.pepy.tech/badge/pylumen)](https://pepy.tech/project/pylumen)
@@ -10,31 +11,28 @@
 
 **Unlock Your AI's Full Potential with Flawless Code Understanding.**
 
-Large Language Models (LLMs) are revolutionizing software development. But their power is capped by one crucial factor: **context**. Feeding your AI the right information about your codebase is tedious, error-prone, and often impossible for large projects due to context window limitations.
+Large Language Models (LLMs) are revolutionizing software development. However, their efficacy is often limited by the quality and completeness of the provided **context**. Manually feeding your AI with relevant information from your codebase can be a tedious, error-prone process, especially for large projects constrained by context window limitations.
 
-**Lumen is here to change that.**
+**Lumen is engineered to address this challenge.**
 
-Lumen is your intelligent CLI companion that automatically scans, structures, and formats your entire codebase into a perfectly crafted prompt for *any* LLM. Stop wrestling with manual copy-pasting and context limits. With Lumen, you give your AI the deep, structured understanding it needs to deliver truly insightful and accurate results.
+Lumen is an intelligent Command Line Interface (CLI) tool that automatically scans, structures, and formats your entire codebase into a meticulously crafted prompt suitable for *any* LLM. Eliminate the friction of manual copy-pasting and context constraints. With Lumen, you provide your AI with the deep, structured understanding necessary to generate truly insightful and accurate results.
 
-**Elevate your AI interactions from frustrating to phenomenal. Power up with Lumen.**
+**Elevate your AI interactions from challenging to highly effective. Power up with Lumen.**
 
 ---
 
 ## Why Lumen?
 
-* **Effortless Context Generation:** Automatically gathers and structures your entire project, no more manual drudgery.
-
-* **Smart File Handling:** Intelligently reads various file types (including `.ipynb` notebooks) with automatic encoding detection.
-
-* **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
-
-* **GitHub Repo Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and cleanup.
-
-* **100% Private & Secure:** Processes everything locally. Your code never leaves your machine during context generation for local projects.
-
-* **Token Insights (New !):** Use the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), helping you optimize large contexts.
-
-* **Reliable & Tested:** Backed by a comprehensive test suite.
+*   **Effortless Context Generation:** Automatically gathers and structures your entire project, removing manual drudgery.
+*   **Optimized Performance:** Experience significantly faster context generation. Internal optimizations, especially in configuration handling, deliver substantial speed improvements, particularly noticeable on large-scale projects.
+*   **Intelligent File Handling:**
+    *   Reads a wide variety of file types, including `.ipynb` notebooks.
+    *   Employs a smart encoding strategy: defaults to UTF-8 for speed and reliability, with an intelligent fallback to detect encoding only if an initial read encounters issues. This ensures correct rendering of special characters and improves overall reading performance.
+*   **Optimized for AI:** Delivers a standardized, AI-friendly output format, including consistent file separators and an introductory message, ensuring maximum LLM comprehension.
+*   **GitHub Repository Analysis:** Seamlessly analyze public GitHub repositories with a single command. Lumen handles the cloning and subsequent cleanup.
+*   **100% Private & Secure:** Processes everything locally. For local projects, your code never leaves your machine during context generation.
+*   **Token Insights:** Utilize the `-l` or `--leaderboard` option to identify the most token-heavy files in your project (top 20 by default), aiding in the optimization of large contexts.
+*   **Reliable & Tested:** Backed by a comprehensive test suite to ensure stability and correctness.
 
 ---
 
@@ -65,16 +63,20 @@ Install Lumen easily using pip:
 
 `pip install pylumen`
 
+To upgrade to the latest version:
+
+`pip install pylumen --upgrade`
+
 ---
 
 ## Quick Start & Usage
 
-Lumen is a breeze to use from your command line (`lum`).
+Lumen is designed for ease of use from your command line (`lum`).
 
 **1. Generate Full Context (Clipboard):**
    Navigate to your project's root and run:
    `lum`
-   *(The complete, structured prompt is copied to your clipboard.)*
+   *(The complete, structured prompt is copied to your clipboard. For very large codebases, consider the `-t` option for better performance.)*
 
 **2. Analyze a Specific Path:**
    `lum /path/to/your/project`
@@ -87,7 +89,7 @@ Lumen is a breeze to use from your command line (`lum`).
    *(Requires Git installed!)*
    `lum -g https://github.com/user/repo-name`
 
-**5. Identify Token-Heavy Files (New!):**
+**5. Identify Token-Heavy Files:**
    See the top 20 (default) most token-consuming files:
    `lum -l`
    Or specify a different number (e.g., top 10):
@@ -111,26 +113,23 @@ Tailor Lumen to your exact needs by editing its configuration file (`~/.lum/conf
 Key settings include:
 *   `intro_text`: Customize the introductory message for your prompts.
 *   `title_text`: Define the format for file titles (e.g., `--- FILE : {file} ---`).
-*   `skipped_folders`: A comprehensive list of folder names to ignore (e.g., `.git`, `node_modules`, `venv`).
+*   `skipped_folders`: A comprehensive list of folder names to ignore. This supports two types of matching:
+    *   **Exact Match:** A string like `"build"` will only skip folders named exactly `build`.
+    *   **Ends-With Match:** A string prefixed with `*`, like `"*.log"` or `".cache"`, will skip any folder whose name *ends with* `.log` (e.g., `app.log`, `server.log`) or `.cache` (e.g., `.pytest_cache`, `.mypy_cache`).
 *   `skipped_files`: A list of specific file names to exclude from context (e.g., `package-lock.json`, `.DS_Store`).
 *   `allowed_file_types`: Specify which file extensions Lumen should process.
 
-**Automatic Updates:** Lumen's configuration is designed to be future-proof. If new configuration options are added in an update, your `config.json` will be intelligently updated to include them, typically preserving your existing customizations. You can always reset to the latest defaults with `lum -r`.
+**Automatic Updates:** Lumen's configuration is designed to be future-proof. If new configuration options are added in an update, your `config.json` will be intelligently updated to include them with their default values, preserving your existing customizations. You can always reset to the latest defaults with `lum -r`.
 
 ---
 
 ## What's Next? The Lumen Roadmap
 
-Lumen is actively evolving! Here's a glimpse of exciting features planned:
+Lumen is actively evolving! Here's a glimpse of planned features and directions:
 
-*   **Streamlined Configuration:** Optimizing the `config.json` structure for conciseness and easier management.
-*   **Enhanced Core Logic:** Refactoring configuration loading and internal data handling for greater efficiency and robustness.
-*   **Lumen as a Library:** Making core utilities like `chunk_read`, `read_ipynb`, and `detect_encoding` easily importable for your Python projects.
-*   **Smarter Token Reduction:**
-    *   Option to exclude comments from the generated context.
-    *   Option to minimize excessive whitespace.
-*   **IDE Integration:** A VS Code extension for "Lumen: Copy Context" right from your editor.
-*   **Advanced Code Understanding:** Exploring Abstract Syntax Tree (AST) integration for a more semantic, potentially even lower-token, representation of your code.
+*   **IDE Integration:** Development of a VS Code extension is underway to allow "Lumen: Copy Context" functionality directly from your editor.
+*   **Web Interface (Exploratory):** We are exploring the potential for a web-based interface to further enhance usability and accessibility.
+*   **Lumen v1.0:** The next major milestone will be Lumen v1.0, focusing on delivering a highly stable, polished, and production-ready experience with further refinements and potential feature enhancements.
 
 Stay tuned for these and more improvements!
 

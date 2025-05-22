@@ -3,25 +3,46 @@ from lum.gitignore import *
 from typing import List
 
 def get_project_structure(root_path: str, skipped_folders: List):
+    #this function looks abit hard, basically will take the root path, format it correctly
+    #to show it in the prompt (with a /... etc), will check first folders, level by level
+    #then files, when adding folders, little format change -> "/" added
     root_path_name = "".join(root_path.split(os.sep)[-1]) + "/"
     structure = {root_path_name: {}}
 
     if gitignore_exists(""):
         _, skipped_folders = gitignore_skipping()
+    
+    for root, _, files in os.walk(root_path, topdown = True):
+        should_skip = False
+        for folder_name in skipped_folders:
+            #in skipped_folders, if starts wiht "*" -> will skip anything that ENDS with the skipped folder name, otherwise will take the folder name directly, and ONLY this
+            if folder_name.startswith("*"):
+                if root.endswith(folder_name[1::]): #remove the * and set condition
+                    _[:] = []
+                    structure[root_path_name][f"{''.join(root.split(os.sep)[-1])}/"] = {}
+                    should_skip = True
+                    break
 
-    for root, directories, files in os.walk(root_path, topdown = True):
-        if any(root.endswith(folder) for folder in skipped_folders):
-            directories[:] = []
-            structure[root_path_name]["".join(root.split(os.sep)[-1]) + "/"] = {} #.join used bcs cant use f string inside dict reading
+            else:
+                element = root.split(os.sep)[-1]
+                if element == folder_name:
+                    _[:] = []
+                    structure[root_path_name][f"{''.join(root.split(os.sep)[-1])}/"] = {}
+                    should_skip = True
+                    break
+
+        if should_skip:
             continue
 
+
         base = structure[root_path_name]
-        level = len(root.split(os.sep)) - len(root_path.split(os.sep)) #start at 1 and ends at biggest level
+        level = len(root.split(os.sep)) - len(root_path.split(os.sep)) #starts at 1, ends at highest level
 
         if level == 0:
             if files:
                 for file in files:
                     base[file] = {}
+
         else:
             for x in range(level, 0, -1):
                 folder_subname = root.split(os.sep)[-x]

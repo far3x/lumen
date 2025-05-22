@@ -1,12 +1,5 @@
-import shutil
-import sys
-import requests
-import subprocess
-import stat
-import os
+import os, shutil, sys, requests, subprocess, stat
 from lum.config import *
-
-#i fixed few functions with ai, the simplest way possible, just bcs of permission errors when deleting the cloned repo :/
 
 
 def make_github_api_link(repo_link: str = None):
@@ -17,6 +10,7 @@ def make_github_api_link(repo_link: str = None):
 
     if repo_link is None:
         return False, False
+    
     if repo_link.startswith("http://"):
         print("Use a secured link please (https:// and not http://)")
         return False, False
@@ -24,10 +18,10 @@ def make_github_api_link(repo_link: str = None):
     clone_link = repo_link if repo_link.endswith(".git") else repo_link + ".git"
     api_proc_link = repo_link[:-4] if repo_link.endswith(".git") else repo_link
 
-    links = ["https://github.com/", "https://www.github.com/", "github.com/", "www.github.com/"]
-    for link_prefix in links:
+    for link_prefix in ["https://github.com/", "https://www.github.com/", "github.com/", "www.github.com/"]:
         if api_proc_link.startswith(link_prefix):
             rest = api_proc_link.split(link_prefix, 1)[-1]
+
             if '/' in rest and not rest.startswith('/') and not rest.endswith('/'):
                  return "https://api.github.com/repos/" + rest, clone_link
 
@@ -42,9 +36,9 @@ def check_repo(repo_link: str = None):
             headers = {
                 'User-Agent': 'LUM-Python-Script'
             }
-
             response = requests.get(url=api_link, timeout=10, headers=headers)
             return response.status_code == 200 #true if exists otherwise false !
+        
         except requests.exceptions.RequestException as e:
             print(f"ERROR checking repository API: {e}")
 
@@ -66,32 +60,34 @@ def check_git():
     return True
 
 
-#this was a pain in the ass
+#function fixed with ai :skull:
 def remove_readonly(func, path, excinfo):
     exc_value = excinfo[1]
-    if isinstance(exc_value, PermissionError) or \
-       (hasattr(exc_value, 'winerror') and exc_value.winerror == 5):
+    if isinstance(exc_value, PermissionError) or (hasattr(exc_value, 'winerror') and exc_value.winerror == 5):
         try:
             os.chmod(path, stat.S_IWRITE | stat.S_IREAD)
-            func(path) #retry
+            func(path)
         except Exception as e:
-            raise exc_value from e #raise if retry/fix failed XD
+            raise exc_value from e
     else:
-        raise exc_value #other
+        raise exc_value
 
 
 def download_repo(repo_link: str = None):
     if not repo_link:
-        raise ValueError("Repository link is required.")
+        print("Repository link is required.")
+        sys.exit(1)
 
     _, clone_link = make_github_api_link(repo_link=repo_link)
     if not clone_link:
-        raise ValueError("Invalid or unsupported GitHub repository link format.")
+        print("Invalid or unsupported GitHub repository link format.")
+        sys.exit(1)
 
     #go to lum config file
     lum_repo = get_config_directory()
     repo_name = clone_link.split("/")[-1].replace(".git", "")
-    if not repo_name: 
+
+    if not repo_name:
         repo_name = clone_link.split("/")[-2] #trailing slash case
     lum_repo_name = os.path.join(lum_repo, repo_name)
 
@@ -102,16 +98,20 @@ def download_repo(repo_link: str = None):
 
     #download with git clone using the parameter
     command = ["git", "clone", clone_link, lum_repo_name]
+
     try:
-        subprocess.run(command, check=True, capture_output=True, text=True) #check will raise an error if there is one with the git clone command, didnt know
+        subprocess.run(command, check=True, capture_output=True, text=True)
         #return the path of the folder to analyze
         return lum_repo_name
+
     except subprocess.CalledProcessError as e:
         print(f"Git clone failed. Error: {e.stderr}")
+
         if os.path.exists(lum_repo_name):
             print("Attempting cleanup of partially cloned folder...")
             remove_repo(lum_repo_name)
-        raise #force exception, didnt know this exists thats so nice
+
+        raise
 
 
 def remove_repo(repo_root: str = None):
@@ -121,5 +121,6 @@ def remove_repo(repo_root: str = None):
 
     try:
         shutil.rmtree(repo_root, onerror=remove_readonly) #if permissions error we remove the readonly to be able to delete the folder we cloned
+
     except Exception as e:
         print(f"ERROR deleting folder {repo_root}: {e}")

@@ -4,7 +4,7 @@
 
 #all the project SHOULD BE os proof, if you notice something is not OS proof, please create an issue :)
 
-import os, json
+import os, json, sys
 
 
 EXPECTED_CONFIG_KEYS = [
@@ -28,36 +28,52 @@ I will ask for help in the next prompt so you can assist me with this project.
     "title_text": "--- FILE : {file} ---", #{file} will be replaced by the file name, KEEP IT PLEASE
 
     "skipped_folders": [
-        ".git", "__pycache__", "node_modules", "venv", ".venv", ".svn", ".hg", "obj", "bin",
-        "build", "dist", "target", ".gradle", ".idea", ".vscode", ".egg-info", ".dist-info",
-        "logs", "log", "tmp", "temp", ".pytest_cache", ".mypy_cache", ".cache", "vendor",
-        "deps", ".next", ".nuxt", ".svelte-kit", ".angular", "coverage", "site", "_site",
-        ".sass-cache", "bower_components", "jspm_packages", "web_modules", ".pyc", ".pyo",
-        ".swp", ".swo", "~", ".DS_Store", "Thumbs.db", "DerivedData", ".settings", ".classpath",
-        ".project", "nbproject", ".sublime-workspace", ".sublime-project", ".terraform",
-        ".tfstate", ".tfstate.backup", ".serverless", ".parcel-cache", "storage/framework",
-        "storage/logs", "bootstrap/cache", "public/build", "public/hot", "public/storage", "var"
+        ".git", ".svn", ".hg", "node_modules", "*.cache", ".*cache", ".*_cache", "_site",
+        "__pycache__", "venv", ".venv", "env", "*.egg-info", "*.dist-info", "mkdocs_build",
+        ".idea", ".vscode", "nbproject", ".settings", "DerivedData", "coverage", "~*",
+        "build", "dist", "out", "output", "target", "bin", "obj", "site", "docs/_build",
+        ".angular", ".next/cache", ".nuxt", ".parcel-cache", ".pytest_cache", "log",
+        ".mypy_cache", ".ruff_cache", ".tox", "temp", "tmp", "logs", "android/app/build",
+        "vendor", "deps", "Pods", "bower_components", "jspm_packages", "web_modules",
+        ".svelte-kit", "storage", "bootstrap/cache", "public/build", "public/hot",
+        "var", ".serverless", ".terraform", "storybook-static", "ios/Pods", "dump"
     ],
 
     "skipped_files": [
-        "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock",
-        "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock",
-        ".DS_Store", "Thumbs.db", ".eslintcache", ".Rhistory", ".node_repl_history",
+        "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock", "npm-debug.log*",
+        "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock", "go.sum"
+        ".DS_Store", "Thumbs.db", ".Rhistory", ".node_repl_history", "yarn-debug.log", ".tfstate",
+        ".sublime-workspace", ".sublime-project", ".env", ".tfstate.backup", "yarn-error.log",
+        "a.out", "main.exe", "celerybeat-schedule", "npm-debug.log", ".eslintcache"
     ],
 
     "allowed_file_types": [
-        ".py", ".pyi", ".r", ".R", ".php", ".ipynb", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs",
-        ".java", ".kt", ".kts", ".scala", ".groovy", ".c", ".cpp", ".cc", ".h", ".hpp", ".hh",
-        ".cs", ".vb", ".go", ".rs", ".rb", ".rbw", ".swift", ".m", ".mm", ".pl", ".pm", ".lua",
-        ".html", ".htm", ".xhtml", ".css", ".scss", ".sass", ".less", ".hbs", ".ejs", ".pug",
-        ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env", ".md",
-        ".markdown", ".rst", "Makefile", ".cmake", ".bazel", "BUILD", "WORKSPACE", ".txt",
-        "package.json", "package-lock.json", "yarn.lock", "bower.json", ".babelrc", ".eslintrc",
-        ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".prettierrc", ".prettierrc.js",
-        ".prettierrc.json", ".prettierrc.yaml", "webpack.config.js", "rollup.config.js", ".gitignore"
-        "requirements.txt", "Pipfile", "Pipfile.lock", "setup.py", "pyproject.toml", ".pylintrc",
-        "Gemfile", "Gemfile.lock", "build.gradle", "pom.xml", "tsconfig.json", ".styl", ".twig",
-        "composer.json", "composer.lock", "Cargo.toml", "Cargo.lock", ".csv", ".tsv", ".sql", ".gd"
+        ".R", ".ada", ".adb", ".adoc", ".ads", ".asciidoc", ".asm", ".asp", ".aspx", ".ascx"
+        ".au3", ".avdl", ".avsc", ".babelrc", ".bash", ".bazel", ".bib", ".browserslistrc", ".c"
+        ".cc", ".cfg", ".cg", ".cjs", ".clj", ".cljc", ".cljs", ".cls", ".cmake", ".cmd", ".comp"
+        ".conf", ".cpp", ".cs", ".csproj", ".cshtml", ".css", ".dart", ".diff"
+        ".editorconfig", ".edn", ".ejs", ".elm", ".env", ".env.example", ".env.local", ".erl"
+        ".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".ex", ".exs", ".f"
+        ".f90", ".fish", ".for", ".frag", ".fx", ".gd", ".gdshader", ".geom", ".gitattributes"
+        ".gitignore", ".gitmodules", ".gitlab-ci.yml", ".glsl", ".gql", ".go", ".graphql"
+        ".groovy", ".h", ".haml", ".hbs", ".hh", ".hjson", ".hlsl", ".hpp", ".hrl", ".hs"
+        ".htaccess", ".htm", ".html", ".htpasswd", ".inc", ".ini", ".ipynb"
+        ".j2", ".java", ".jinja", ".js", ".json", ".json5", ".jsx", ".kt", ".kts", ".less", ".lhs"
+        ".liquid", ".lisp", ".log", ".lsp", ".ltx", ".lua", ".m", ".mailmap", ".markdown"
+        ".marko", ".md", ".metal", ".mjs", ".mm", ".mustache", ".netlify.toml", ".npmrc"
+        ".nvmrc", ".pas", ".patch", ".php", ".pl", ".plist", ".pm", ".pp"
+        ".prettierrc", ".prettierrc.js", ".prettierrc.json", ".prettierrc.yaml", ".properties"
+        ".proto", ".ps1", ".psd1", ".psm1", ".pug", ".py", ".pyi", ".pylintrc", ".r", ".rb"
+        ".rbw", ".rs", ".rst", ".s", ".sass", ".scala", ".scm", ".scss", ".sh"
+        ".sln", ".slim", ".soy", ".sql", ".styl", ".sty", ".sv", ".svelte"
+        ".swift", ".tcl", ".tesc", ".tese", ".tex", ".textile", ".tf", ".tfvars", ".thrift"
+        ".toml", ".ts", ".tsx", ".txt", ".twig", ".v", ".vb", ".vbhtml", ".vbproj"
+        ".vert", ".vbs", ".vhdl", ".vue", ".vtt", ".wgsl", ".xhtml", ".xml", ".yaml", ".yarnrc"
+        ".yml", ".zsh", "BUILD", "CMakeLists.txt", "Cargo.toml", "Dockerfile", "Gemfile"
+        "Jenkinsfile", "Makefile", "Pipfile", "Vagrantfile", "WORKSPACE", "bower.json"
+        "browserslist", "build.gradle", "build.xml", "composer.json", "docker-compose.yml"
+        "now.json", "package.json", "pom.xml", "pyproject.toml", "requirements.txt"
+        "rollup.config.js", "setup.py", "tsconfig.json", "vercel.json", "webpack.config.js"
     ]
 }
 
@@ -72,14 +88,11 @@ config_file = "config.json"
 #config files management
 #if config folder or file doesnt exist, create it, same if config file is outdated, auto reset
 def check_config():
-    config_dir = get_config_directory()
-    config_path = get_config_file()
+    config_dir, config_path = get_config_directory(), get_config_file()
+    config_needs_creation_or_reset, config_data = False, {}
 
     if not os.path.exists(config_dir):
         os.makedirs(config_dir)
-
-    config_needs_creation_or_reset = False
-    config_data = {}
 
     if os.path.exists(config_path):
         try:
@@ -90,10 +103,9 @@ def check_config():
             if not all(key in config_data for key in EXPECTED_CONFIG_KEYS):
                 config_needs_creation_or_reset = True
 
-        except json.JSONDecodeError:
-            config_needs_creation_or_reset = True
         except Exception as e:
             config_needs_creation_or_reset = True
+
     else:
         config_needs_creation_or_reset = True
 
@@ -106,13 +118,14 @@ def check_config():
                     indent = 4
                 )
             if not os.path.exists(config_path) or (os.path.exists(config_path) and not config_data):
-                 print("Configuration files initialized.")
+                print("Configuration files initialized.")
+
         except Exception as error:
-            print(f"Error writing config file: {error}")
-            exit()
+            print(f"Config file not found or could not be modified - error : {error}")
+            sys.exit(1)
+
 
 def reset_config():
-    check_config() #in case user resets config for no reason before he uses lum command normally, wont create conflicts
     try:
         with open(get_config_file(), "w+") as config_file:
             json.dump(
@@ -124,8 +137,8 @@ def reset_config():
         config_file.close()
     
     except Exception as error:
-        print(f"Exception when file read : {error}")
-        exit()
+        print(f"Config file not found or could not be modified - error : {error}")
+        sys.exit(1)
 
 
 #get directories and files for config initialization or reading
@@ -136,8 +149,6 @@ def get_config_file():
     return str(os.path.join(get_config_directory(), config_file))
 
 
-#get config infos
-#redondant, fix soon ?
 def get_intro():
     with open(get_config_file(), "r") as data:
         d = json.load(data)
