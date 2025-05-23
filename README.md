@@ -9,7 +9,7 @@ Lumen - Supercharge Your AI with Perfect Code Context
 
 ---
 
-Disclamer: this code was almost ENTIRELY written by me, AI was poorly involved in this project (only used it for some permission issues while deleting git folders, because git clone is a buggy command for security purposes). Yes, it's fun to code manually and optimize them naturally :)
+Disclamer: this code was almost ENTIRELY written by me, AI was poorly involved in this project (only used it for some permission issues while deleting git folders, because git clone is a buggy command for security purposes). Yes, it's fun to code manually and optimize code naturally :))
 
 **Unlock Your AI's Full Potential with Flawless Code Understanding.**
 
