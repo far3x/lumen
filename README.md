@@ -9,6 +9,8 @@ Lumen - Supercharge Your AI with Perfect Code Context
 
 ---
 
+Disclamer: this code was almost ENTIRELY written by me, AI was poorly involved in this project (only used it for some permission issues while deleting git folders, because git clone is a buggy command for security purposes). Yes, it's fun to code manually and optimize them naturally :)
+
 **Unlock Your AI's Full Potential with Flawless Code Understanding.**
 
 Large Language Models (LLMs) are revolutionizing software development. However, their efficacy is often limited by the quality and completeness of the provided **context**. Manually feeding your AI with relevant information from your codebase can be a tedious, error-prone process, especially for large projects constrained by context window limitations.
