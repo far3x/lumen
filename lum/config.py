@@ -1,11 +1,4 @@
-#Generating a json file in appdata or where the pip module is stocked.
-#1 backup version, for when the user wants to reset
-#1 base version, so the one the user will use, with customized title, prompt or anything
-
-#all the project SHOULD BE os proof, if you notice something is not OS proof, please create an issue :)
-
 import os, json, sys
-
 
 EXPECTED_CONFIG_KEYS = [
     "intro_text",
@@ -25,7 +18,7 @@ Respond with 'OK' and for now, just understand the project completely.
 I will ask for help in the next prompt so you can assist me with this project.
 """,
 
-    "title_text": "--- FILE : {file} ---", #{file} will be replaced by the file name, KEEP IT PLEASE
+    "title_text": "--- FILE : {file} ---",
 
     "skipped_folders": [
         ".git", ".svn", ".hg", "node_modules", "*.cache", ".*cache", ".*_cache", "_site",
@@ -77,16 +70,9 @@ I will ask for help in the next prompt so you can assist me with this project.
     ]
 }
 
-
 config_folder = ".lum"
 config_file = "config.json"
 
-#check if config exists, if not it creates it, otherwise will never change the parameters in case of pip update
-#folder check then file check, need to run this on main on every command start
-
-
-#config files management
-#if config folder or file doesnt exist, create it, same if config file is outdated, auto reset
 def check_config():
     config_dir, config_path = get_config_directory(), get_config_file()
     config_needs_creation_or_reset, config_data = False, {}
@@ -99,7 +85,6 @@ def check_config():
             with open(config_path, "r", encoding="utf-8") as f:
                 config_data = json.load(f)
 
-            #check if any expected key is missing
             if not all(key in config_data for key in EXPECTED_CONFIG_KEYS):
                 config_needs_creation_or_reset = True
 
@@ -141,45 +126,52 @@ def reset_config():
         sys.exit(1)
 
 
-#get directories and files for config initialization or reading
 def get_config_directory():
     return str(os.path.join(os.path.expanduser("~"), config_folder))
 
 def get_config_file():
     return str(os.path.join(get_config_directory(), config_file))
 
+def get_config_data():
+    try:
+        with open(get_config_file(), "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return BASE_CONFIG.copy()
+
+def save_config_data(data):
+    try:
+        with open(get_config_file(), "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+    except Exception as e:
+        print(f"Could not save config file: {e}")
+
+def store_pat(pat: str):
+    config_data = get_config_data()
+    config_data["pat"] = pat
+    save_config_data(config_data)
+
+def get_pat():
+    return get_config_data().get("pat")
+
+def remove_pat():
+    config_data = get_config_data()
+    if "pat" in config_data:
+        del config_data["pat"]
+        save_config_data(config_data)
+    return True
 
 def get_intro():
-    with open(get_config_file(), "r") as data:
-        d = json.load(data)
-        d = d["intro_text"]
-    data.close()
-    return d
+    return get_config_data().get("intro_text", BASE_CONFIG["intro_text"])
 
 def get_title():
-    with open(get_config_file(), "r") as data:
-        d = json.load(data)
-        d = d["title_text"]
-    data.close()
-    return d
+    return get_config_data().get("title_text", BASE_CONFIG["title_text"])
 
 def get_skipped_folders():
-    with open(get_config_file(), "r") as data:
-        d = json.load(data)
-        d = d["skipped_folders"]
-    data.close()
-    return d
+    return get_config_data().get("skipped_folders", BASE_CONFIG["skipped_folders"])
 
 def get_skipped_files():
-    with open(get_config_file(), "r") as data:
-        d = json.load(data)
-        d = d["skipped_files"]
-    data.close()
-    return d
+    return get_config_data().get("skipped_files", BASE_CONFIG["skipped_files"])
 
 def get_allowed_file_types():
-    with open(get_config_file(), "r") as data:
-        d = json.load(data)
-        d = d["allowed_file_types"]
-    data.close()
-    return d
+    return get_config_data().get("allowed_file_types", BASE_CONFIG["allowed_file_types"])

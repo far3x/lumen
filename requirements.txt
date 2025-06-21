@@ -2,3 +2,6 @@ requests
 pyperclip
 chardet
 tiktoken
+colorama
+Pygments
+detect-secrets

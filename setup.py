@@ -3,13 +3,16 @@ import os
 
 setup(
     name = "pylumen",
-    version = "v0.4", #will remove "v" soon, in official release -> 1.0
+    version = "v1.0.0",
     packages = find_packages(include = ["lum", "lum.*"]),
     install_requires = [
         "requests",
         "pyperclip",
         "chardet",
-        "tiktoken"
+        "tiktoken",
+        "colorama",
+        "Pygments",
+        "detect-secrets"
     ],
     entry_points = {
         "console_scripts": [
@@ -19,7 +22,8 @@ setup(
     author = "Far3k",
     author_email = "far3000yt@gmail.com",
     description = "Lumen: Intelligently prepares your codebase context for any LLM, solving context window limits with smart retrieval and providing deep project understanding.",
-    long_description = open("README.md", encoding="utf-8").read() if os.path.exists("README.md") else "",    long_description_content_type = "text/markdown",
+    long_description = open("README.md", encoding="utf-8").read() if os.path.exists("README.md") else "",
+    long_description_content_type = "text/markdown",
     url = "https://github.com/Far3000-YT/lumen",
     classifiers = [
         "Programming Language :: Python :: 3",
