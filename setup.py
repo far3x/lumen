@@ -12,7 +12,8 @@ setup(
         "tiktoken",
         "colorama",
         "Pygments",
-        "detect-secrets"
+        "detect-secrets",
+        "websockets"
     ],
     entry_points = {
         "console_scripts": [

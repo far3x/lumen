@@ -5,3 +5,4 @@ tiktoken
 colorama
 Pygments
 detect-secrets
+websockets

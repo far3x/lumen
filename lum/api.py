@@ -3,8 +3,37 @@ import time
 import json
 import hmac
 import hashlib
+import asyncio
+import websockets
 
-BASE_URL = "https://lumenxxx.site/api/v1"
+BASE_URL = "https://lumen.onl/api/v1"
+
+async def listen_for_token(device_code: str, expires_in: int):
+    if BASE_URL.startswith("https://"):
+        ws_scheme = "wss"
+        ws_host_port = BASE_URL[len("https://"):]
+    else:
+        ws_scheme = "ws"
+        ws_host_port = BASE_URL[len("http://"):]
+    
+    ws_host = ws_host_port.split('/')[0]
+    uri = f"{ws_scheme}://{ws_host}/ws/cli/authorize/{device_code}"
+    
+    try:
+        async with websockets.connect(uri) as websocket:
+            print("   Waiting for authorization...")
+            try:
+                message = await asyncio.wait_for(websocket.recv(), timeout=expires_in)
+                data = json.loads(message)
+                if "token" in data:
+                    return data["token"]
+                return None
+            except asyncio.TimeoutError:
+                return None
+            except websockets.exceptions.ConnectionClosed:
+                return None
+    except Exception:
+        return None
 
 def perform_login():
     try:
@@ -15,30 +44,20 @@ def perform_login():
         device_code = data['device_code']
         user_code = data['user_code']
         verification_uri = data['verification_uri']
-        interval = data['interval']
         expires_in = data['expires_in']
 
         print(f"\n1. Please go to: {verification_uri}")
         print(f"2. And enter this code: {user_code}\n")
-
-        start_time = time.time()
-        while time.time() - start_time < expires_in:
-            print("   Polling for authorization...")
-            time.sleep(interval)
-            try:
-                token_response = requests.post(f"{BASE_URL}/cli/token", params={"device_code": device_code}, timeout=10)
-                if token_response.status_code == 200:
-                    pat = token_response.json()['access_token']
-                    return pat
-            except requests.RequestException:
-                pass
         
-        return None
+        return asyncio.run(listen_for_token(device_code, expires_in))
 
     except requests.RequestException as e:
         print(f"Error during login: {e}")
         if e.response:
-            print(f"   Response: {e.response.json()}")
+            try:
+                print(f"   Response: {e.response.json()}")
+            except json.JSONDecodeError:
+                print(f"   Response: {e.response.text}")
         return None
 
 def submit_contribution(pat: str, codebase: str):
