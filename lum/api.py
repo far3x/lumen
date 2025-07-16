@@ -7,6 +7,7 @@ import asyncio
 import websockets
 
 BASE_URL = "https://lumen.onl/api/v1"
+#BASE_URL = "http://localhost:8000/api/v1"
 
 async def listen_for_token(device_code: str, expires_in: int):
     if BASE_URL.startswith("https://"):
