@@ -3,11 +3,14 @@ from lum.assembly import *
 from lum.config import *
 from lum.github import *
 from lum.smart_read import *
+import lum.api as api
 
 from typing import List
 import json, os, sys, platform, subprocess, argparse, pyperclip
+from colorama import init, Fore, Style
 
-#get parameters initially from file
+init(autoreset=True)
+
 def get_parameters():
     base_parameters = {
         "intro_text": get_intro(),
@@ -16,8 +19,6 @@ def get_parameters():
     }
     return base_parameters
 
-
-#all changing parameters
 def change_parameters():
     if platform.system() == "Windows":
         os.startfile(get_config_file())
@@ -26,9 +27,7 @@ def change_parameters():
     else:
         subprocess.Popen(["xdg-open", get_config_file()])
 
-
 def make_structure(path: str, skipped: List):
-    #when user types a path, we use this function with an argument, otherwise no argument and get automatically the path
     data = json.dumps(
         get_project_structure(
             root_path = path,
@@ -38,172 +37,255 @@ def make_structure(path: str, skipped: List):
     )
     return data
 
-
-def lum_command(args, isGitHub: bool = False, GitHubRoot: str = None):
-    print("Launching...")
+def lum_command_local(args):
+    print("Launching local analysis...")
     root_path = args.path
-
-    if isGitHub:
-        if GitHubRoot:
-            root_path = GitHubRoot
-
-        else:
-            print("The path to the GitHub repo was not found!")
-            sys.exit(1)
 
     if args.txt: output_file = args.txt
     else: output_file = None
 
-    check_config() #in case of first run, will automatically add config files etc
+    check_config()
     base_parameters = get_parameters()
 
-    #used parameters, read ONCE each parameter, no more -> output should be :
-    #x2 skipped folders, x2 skipped files, x1 intro, x1 title, x1 allowed file types ---- OBJECTIVE NOT MET BUT ALMOST
-    #before : was this but, the higher the folders = more iterations for reading files
-    #this is the best time optimization, and was the most consuming process
-    #this + not forcing encoding detection = best possible performances (if we dont count python compilers ahah)
-    
-    #went from reading parameters once every file read, to once BEFORE, now reading files "only" 18 times total
-    #this is optimized and stable, wont change unless i really want that ms difference
-    #(it won't rly change anything to read 3.5 times more basically !)
     intro_text = base_parameters["intro_text"]
 
-    if gitignore_exists(""): skipped_files, _ = gitignore_skipping() #skipped_folders never used here, maybe can optimize later that
+    if gitignore_exists(""): skipped_files, _ = gitignore_skipping()
     else: skipped_files = get_files_parameters()["non_allowed_read"]
 
     allowed_files = get_files_parameters()["allowed_files"]
-
     skipped_folders = base_parameters["skipped_folders"]
 
     files_root = get_files_root(root_path, skipped_folders)
     title_text = base_parameters["title_text"]
 
-    #if ranking enabled, use the ranking in backend to show top 20 most consuming files in term of token by default
     if args.leaderboard is not None:
         rank_tokens(files_root, args.leaderboard, allowed_files = allowed_files, skipped_files = skipped_files)
 
-
-    #STRUCTURE, MOST IMPORTANT FOR PROMPT
     structure = ""
     structure = add_intro(structure, intro_text)
     structure = add_structure(structure, make_structure(root_path, skipped_folders))
     structure = add_files_content(structure, files_root, title_text = title_text, allowed_files = allowed_files, skipped_files = skipped_files)
 
-
     if output_file is None:
         try:
             pyperclip.copy(structure)
-            print("Prompt copied to clipboard.\nIf you encounter a very big codebase, try to get a '.txt' output for better performances (clipboard won't make your pc lag).")
-        #non-windows case, where the clipboard won't work on all containers because of some limitations. will try to find a LIGHT advanced fix asap (tkinter is a possibility but too large for a single module where we just need clipboard support)
+            print(Fore.GREEN + "Prompt copied to clipboard.")
+            print(Style.DIM + "If you encounter a very big codebase, try to get a '.txt' output for better performances.")
         except pyperclip.PyperclipException as e:
+            output_path = os.path.join(os.getcwd(), "prompt.txt")
             try:
-                with open("prompt.txt", "w+", encoding="utf-8") as file:
+                with open(output_path, "w+", encoding="utf-8") as file:
                     file.write(structure)
-                print("Copy to clipboard failed. Output is done in the root, as 'prompt.txt', to fix this please look at the README documentation (2 commands to fix this for most linux cases, install xsel or xclip).")
+                print(Fore.YELLOW + f"Copy to clipboard failed. Output saved to '{output_path}'.")
+                print(Style.DIM + "To fix clipboard issues on Linux, install xsel or xclip.")
             except Exception as e:
-                print(f"Error saving prompt to file {output_path}: {e}")
+                print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
 
     elif output_file is not None:
         output_path = os.path.join(root_path, f"{output_file}.txt")
         try:
             with open(output_path, "w+", encoding="utf-8") as file:
                 file.write(structure)
-            print(f"Prompt saved to {output_path}")
+            print(Fore.GREEN + f"Prompt saved to {output_path}")
         except Exception as e:
-            print(f"Error saving prompt to file {output_path}: {e}")
-
+            print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
 
 def lum_github(args):
     git_exists = check_git()
-    if git_exists == False:
+    if not git_exists:
         sys.exit(1)
 
     github_link = args.github
-    check_repo(github_link)
-
-    if github_link:
-        try:
-            git_root = download_repo(github_link)
-            lum_command(args = args, isGitHub = True, GitHubRoot = git_root)
-
-        finally:
-            git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-1].replace(".git", ""))
-            if not git_root_to_remove:
-                git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-2])
-            remove_repo(git_root_to_remove)
-    else:
-        print("GitHub repo doesn't exist, please try again with a correct link (check that the repository is NOT private, and that you are connected to internet !)")
+    if not check_repo(github_link):
+        print(Fore.RED + "GitHub repo doesn't exist or is private. Please try again with a correct public link.")
         sys.exit(1)
 
+    try:
+        git_root = download_repo(github_link)
+        args.path = git_root
+        lum_command_local(args)
+
+    finally:
+        git_root_to_remove = os.path.join(get_config_directory(), github_link.split("/")[-1].replace(".git", ""))
+        remove_repo(git_root_to_remove)
+
+def lum_login(args):
+    if get_pat():
+        print(Fore.YELLOW + "You are already logged in.")
+        print("To switch accounts, please run `lum logout` first.")
+        return
+
+    print(Fore.CYAN + "Welcome to the Lumen Contributor Network!")
+    print("By logging in, you agree to contribute your anonymized code to the Lumen Protocol.")
+    print("Our CLI performs all sanitization and anonymization steps " + Fore.YELLOW + "locally on your machine" + Style.RESET_ALL + " before submission.")
+    print("Your raw code, secrets, and IP are never transmitted.\n")
+    
+    consent = input("Do you understand and agree to proceed? (Y/N): ").strip().upper()
+    if consent != "Y":
+        print("Login cancelled.")
+        return
+
+    pat = api.perform_login()
+    if pat:
+        store_pat(pat)
+        print(Fore.GREEN + "\n✅ Success! Device authorized. You can now use `lum contribute`.")
+    else:
+        print(Fore.RED + "\n❌ Error: Authorization failed or timed out.")
+
+def lum_logout(args):
+    if not get_pat():
+        print(Fore.YELLOW + "You are not logged in.")
+        return
+        
+    remove_pat()
+    print(Fore.GREEN + "You have been successfully logged out.")
+    print("Thank you for your contributions to the Lumen network!")
+
+def lum_contribute(args):
+    pat = get_pat()
+    if not pat:
+        print(Fore.RED + "You are not logged in. Please run `lum login` first.")
+        return
+
+    print("Starting contribution process...")
+    root_path = os.getcwd()
+
+    if gitignore_exists(""):
+        skipped_files, skipped_folders = gitignore_skipping()
+    else:
+        skipped_files = get_files_parameters()["non_allowed_read"]
+        skipped_folders = get_skipped_folders()
+    
+    allowed_files = get_files_parameters()["allowed_files"]
+    
+    print("1. Assembling file structure...")
+    files_root = get_files_root(root_path, skipped_folders)
+    if not files_root:
+        print(Fore.YELLOW + "No allowed files found in this directory. Nothing to contribute.")
+        return
+    
+    print("2. Sanitizing code and preparing payload...")
+    codebase = assemble_for_api(files_root, allowed_files, skipped_files)
+    
+    print("3. Submitting to Lumen network...")
+    response = api.submit_contribution(pat, codebase)
+    
+    if response:
+        print(Fore.GREEN + f"\n✅ Contribution successful! (ID: {response.get('contribution_id')})")
+        print("Your submission is now in the processing queue.")
+        print("You can check its status at any time with `lum history`.")
+    else:
+        print(Fore.RED + "\n❌ Contribution failed. Please check the error message above.")
+
+def lum_history(args):
+    pat = get_pat()
+    if not pat:
+        print(Fore.RED + "You are not logged in. Please run `lum login` first.")
+        return
+
+    print("Fetching your last 10 contributions...")
+    history = api.get_history(pat)
+
+    if history is None:
+        print(Fore.RED + "Could not fetch contribution history.")
+        return
+    
+    if not history:
+        print(Fore.YELLOW + "No contributions found.")
+        return
+
+    print("\n" + Style.BRIGHT + "{:<5} {:<22} {:<30} {:<15}".format("ID", "Date", "Status", "Reward ($LUM)") + Style.RESET_ALL)
+    print("-" * 75)
+    for item in history:
+        date = item.get('created_at').split('T')[0]
+        status = item.get('status', 'UNKNOWN')
+        reward = item.get('reward_amount', 0.0)
+        
+        status_colors = {
+            'PROCESSED': Fore.GREEN, 'PENDING': Fore.YELLOW, 'PROCESSING': Fore.CYAN,
+        }
+        status_color = status_colors.get(status, Fore.RED)
+
+        reward_str = f"{reward:.4f}" if reward > 0 else "..."
+        print("{:<5} {:<22} {}{:<30}{} {:<15}".format(
+            item.get('id'), date, status_color, status, Style.RESET_ALL, reward_str
+        ))
+    print("-" * 75)
+
+def print_custom_help():
+    print(Fore.CYAN + Style.BRIGHT + "Lumen CLI" + Style.RESET_ALL + " - Your gateway to the Lumen Protocol and local AI context generation.")
+    print(Style.DIM + "Usage: lum <command> [options]\n")
+
+    print(Style.BRIGHT + "Network Commands" + Style.RESET_ALL + " (sends data to Lumen)")
+    print(f"  {Fore.GREEN}{'login':<15}{Style.RESET_ALL} Authorize this device to contribute.")
+    print(f"  {Fore.GREEN}{'contribute':<15}{Style.RESET_ALL} Sanitize and submit the current project to the network.")
+    print(f"  {Fore.GREEN}{'history':<15}{Style.RESET_ALL} View the status of your recent contributions.")
+    print(f"  {Fore.GREEN}{'logout':<15}{Style.RESET_ALL} De-authorize this device.")
+
+    print("\n" + Style.BRIGHT + "Local Prompt Generation" + Style.RESET_ALL + " (does NOT send data)")
+    print(f"  {Fore.CYAN}{'local [path]':<15}{Style.RESET_ALL} Analyze a directory and copy a prompt to the clipboard.")
+    print(Style.DIM + "  Options for 'local':")
+    print(f"    {Fore.CYAN}{'-g <URL>':<13}{Style.RESET_ALL} Analyze a public GitHub repository instead of a local path.")
+    print(f"    {Fore.CYAN}{'-t <name>':<13}{Style.RESET_ALL} Save prompt to a text file (e.g., 'name.txt').")
+    print(f"    {Fore.CYAN}{'-l [num]':<13}{Style.RESET_ALL} Show a leaderboard of the most token-heavy files (default: 20).")
+
+    print("\n" + Style.BRIGHT + "Configuration" + Style.RESET_ALL)
+    print(f"  {Fore.YELLOW}{'config --edit':<15}{Style.RESET_ALL} Open the configuration file for editing.")
+    print(f"  {Fore.YELLOW}{'config --reset':<15}{Style.RESET_ALL} Reset all settings to their default values.")
+
+    print("\n" + Style.DIM + "Use 'lum <command> --help' for more details on any command.")
 
 def main():
     parser = argparse.ArgumentParser(
-        description = "The best tool to generate AI prompts from code projects, in a single command !"
+        description="Lumen CLI: Contribute code to the Lumen network or generate local prompts.",
+        formatter_class=argparse.RawTextHelpFormatter
     )
 
-    parser.add_argument(
-        "path",
-        nargs = "?", #0 or 1 argument #HOW GOOD IS ARGPARSE LET THEM COOK, WHOEVER MADE THIS IS A GENIUS
-        default = os.getcwd(),
-        help = "Path to the root to process. If not specified, will use the main root.",
-    )
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    parser.add_argument(
-        "-c",
-        "--configure",
-        action = "store_true", #basically will trigger true when parameter is used, no args in this case
-        help = "Opens and allows changing the configuration file."
-    )
+    parser_login = subparsers.add_parser('login', help='Log in and authorize this device to contribute.')
+    
+    parser_logout = subparsers.add_parser('logout', help='Log out and remove local credentials.')
 
-    parser.add_argument(
-        "-r",
-        "--reset",
-        action = "store_true", #same as -c
-        help = "Resets all configurations to default values."
-    )
+    parser_contribute = subparsers.add_parser('contribute', help='Sanitize and contribute the current project to the Lumen network.')
 
-    parser.add_argument( #no more hide, hiding prompt parts is useless
-        "-l",
-        "--leaderboard",
-        nargs = "?",
-        const = 20,
-        default = None,
-        type = int,
-        metavar = "NUM", #will show top 20 most consuming files in term of tokens by default, can put any number tho and will show the leaderboard
-        help = "Leaderboard of the most token consuming files (default: 20)."
-    )
+    parser_history = subparsers.add_parser('history', help='View your last 10 contributions.')
 
-    parser.add_argument(
-        "-t",
-        "--txt",
-        metavar = "FILENAME",
-        help = "Outputs the file name as FILENAME.txt in the root."
-    )
-
-    parser.add_argument(
-        "-g",
-        "--github",
-        metavar = "REPO",
-        help = "Runs the main command into a GitHub repository."
-    )
+    parser_local = subparsers.add_parser('local', help='Generate a local prompt without sending data.')
+    parser_local.add_argument("path", nargs="?", default=os.getcwd(), help="Path to process (default: current directory).")
+    parser_local.add_argument("-l", "--leaderboard", nargs="?", const=20, default=None, type=int, metavar="NUM", help="Show token leaderboard (default: 20).")
+    parser_local.add_argument("-t", "--txt", metavar="FILENAME", help="Save output to a .txt file.")
+    parser_local.add_argument("-g", "--github", metavar="REPO", help="Analyze a public GitHub repository.")
+    
+    parser_config = subparsers.add_parser('config', help='Manage configuration.')
+    config_group = parser_config.add_mutually_exclusive_group(required=True)
+    config_group.add_argument('--edit', action='store_true', help='Open config file for editing.')
+    config_group.add_argument('--reset', action='store_true', help='Reset config to defaults.')
 
     args = parser.parse_args()
+    check_config()
 
-    if args.configure:
-        print("Config file opened. Check your code editor.")
-        check_config()
-        change_parameters()
-
-    elif args.reset:
-        check_config()
-        reset_config()
-    
-    elif args.github: #if github link we go to the repo, parse the link to make it usable for the api call, then take all the files and make an analysis
-        lum_github(args = args)
-
-    else: #if not reset or config, main purpose of the script
-        lum_command(args = args)
-        
+    if args.command == 'login':
+        lum_login(args)
+    elif args.command == 'logout':
+        lum_logout(args)
+    elif args.command == 'contribute':
+        lum_contribute(args)
+    elif args.command == 'history':
+        lum_history(args)
+    elif args.command == 'config':
+        if args.edit:
+            print("Config file opened. Check your code editor.")
+            change_parameters()
+        elif args.reset:
+            reset_config()
+    elif args.command == 'local':
+        if args.github:
+            lum_github(args)
+        else:
+            lum_command_local(args)
+    else:
+        print_custom_help()
 
 if __name__ == "__main__":
     main()

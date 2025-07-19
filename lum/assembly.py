@@ -1,5 +1,6 @@
 from lum.smart_read import read_file
 from lum.gitignore import *
+from lum.data import sanitize_code
 from typing import List
 import os
 
@@ -11,7 +12,6 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
         from lum.smart_read import get_files_parameters
         allowed = get_files_parameters()["allowed_files"]
     
-    #if gitignore, add skipped folders to existing skipped folder file
     if gitignore_exists(""):
         _, skipped_folders = gitignore_skipping()
 
@@ -20,9 +20,8 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
     for root, _, files in os.walk(main_root):
         should_skip = False
         for folder_name in skipped_folders:
-            #in skipped_folders, if starts wiht "*" -> will skip anything that ENDS with the skipped folder name, otherwise will take the folder name directly, and ONLY this
             if folder_name.startswith("*"):
-                if root.endswith(folder_name[1::]): #remove the * and set condition
+                if root.endswith(folder_name[1::]):
                     _[:] = []
                     should_skip = True
                     break
@@ -62,11 +61,23 @@ def add_structure(prompt: str, json_structure: str):
 
 
 def add_files_content(prompt: str, files_root: dict, title_text: str = None, allowed_files: List = None, skipped_files: List = None):
-    #file title then file content added in the prompt
     for file_name, file_path in files_root.items():
-        #specify in the prompt the path and which file we're reading
         prompt += title_text.format(file = file_name) + PROMPT_SEPERATOR
-        #specify in the prompt the content of that file
         prompt += read_file(file_path, allowed_files = allowed_files, skipped_files = skipped_files) + PROMPT_SEPERATOR
 
     return prompt
+
+def assemble_for_api(files_root: dict, allowed_files: List = None, skipped_files: List = None):
+    full_code_blob = ""
+    api_file_seperator = "\n\n---lum--new--file--"
+
+    for file_name, file_path in files_root.items():
+        raw_content = read_file(file_path, allowed_files=allowed_files, skipped_files=skipped_files)
+        full_code_blob += f"{api_file_seperator}{file_name}\n{raw_content}"
+    
+    sanitized_payload = sanitize_code(full_code_blob)
+
+    #with open("output-test.txt", "w+", encoding = "utf-8") as e: #for debug, to make sure we send everything well !
+    #    e.write(sanitized_payload.strip())
+
+    return sanitized_payload.strip()
