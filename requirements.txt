@@ -4,5 +4,6 @@ chardet
 tiktoken
 colorama
 Pygments
-detect-secrets
+trufflehog3
 websockets
+scrubadub

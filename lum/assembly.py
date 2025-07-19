@@ -68,15 +68,16 @@ def add_files_content(prompt: str, files_root: dict, title_text: str = None, all
     return prompt
 
 def assemble_for_api(files_root: dict, allowed_files: List = None, skipped_files: List = None):
-    api_payload = ""
+    full_code_blob = ""
     api_file_seperator = "\n\n---lum--new--file--"
 
     for file_name, file_path in files_root.items():
         raw_content = read_file(file_path, allowed_files=allowed_files, skipped_files=skipped_files)
-        sanitized_content = sanitize_code(raw_content, file_name)
-        api_payload += f"{api_file_seperator}{file_name}\n{sanitized_content}"
+        full_code_blob += f"{api_file_seperator}{file_name}\n{raw_content}"
     
-    #with open("output-test.txt", "w+", encoding = "utf-8") as e: #for debug, to make sure we send everything well !
-    #    e.write(api_payload.strip())
+    sanitized_payload = sanitize_code(full_code_blob)
 
-    return api_payload.strip()
+    #with open("output-test.txt", "w+", encoding = "utf-8") as e: #for debug, to make sure we send everything well !
+    #    e.write(sanitized_payload.strip())
+
+    return sanitized_payload.strip()

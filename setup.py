@@ -12,8 +12,9 @@ setup(
         "tiktoken",
         "colorama",
         "Pygments",
-        "detect-secrets",
-        "websockets"
+        "websockets",
+        "scrubadub",
+        "trufflehog3"
     ],
     entry_points = {
         "console_scripts": [
