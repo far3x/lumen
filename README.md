@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./docs/logo.png" alt="Lumen Logo" width="150">
+  <img src="./assets/logo.png" alt="Lumen Logo" width="150">
 </p>
 
-<h1 align="center">Lumen CLI 💡</h1>
+<h1 align="center">🪼 Lumen CLI</h1>
 
 <p align="center">
   A multi-purpose CLI for interacting with the Lumen Protocol and generating local AI prompts from your codebase.
