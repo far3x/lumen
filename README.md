@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="Lumen Logo" width="150">
+  <img src="./docs/logo.png" alt="Lumen Logo" width="150">
 </p>
 
-<h1 align="center">ଳ Lumen CLI</h1>
+<h1 align="center">Lumen CLI 💡</h1>
 
 <p align="center">
   A multi-purpose CLI for interacting with the Lumen Protocol and generating local AI prompts from your codebase.
@@ -16,8 +16,8 @@
 </p>
 <p align="center">
     <a href="https://github.com/Far3000-YT/lumen/actions/workflows/release.yaml"><img src="https://github.com/Far3000-YT/lumen/actions/workflows/release.yaml/badge.svg" alt="Build Status"></a>
-    <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
     <a href="https://github.com/Far3000-YT/lumen/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome"></a>
+    <a href="https://lumen.onl/docs/introduction"><img src="https://img.shields.io/badge/docs-lumen.onl-13131A.svg" alt="Documentation"></a>
     <a href="https://github.com/Far3000-YT/lumen/stargazers/"><img src="https://img.shields.io/github/stars/Far3000-YT/lumen.svg?style=social&label=Star" alt="GitHub stars"></a>
 </p>
 
@@ -25,17 +25,29 @@
 
 ### Table of Contents
 
+-   [Why Lumen?](#why-lumen)
 -   [Features](#features)
 -   [Prerequisites](#prerequisites)
--   [Installation](#installation)
+-   [Installation & Troubleshooting](#installation--troubleshooting)
 -   [Commands](#commands)
     -   [Network Commands](#network-commands)
     -   [Local Prompt Generation](#local-prompt-generation)
     -   [Configuration](#configuration)
+-   [Documentation](#documentation)
 -   [Contributing](#contributing)
 -   [License](#license)
 
 ---
+
+<h2 id="why-lumen">Why Lumen?</h2>
+
+Lumen started as a powerful local tool for developers to generate flawless, LLM-ready prompts from their codebases, solving the tedious process of manual context building. As we built it, we recognized a larger opportunity: the very code developers were analyzing held immense, untapped value for the AI ecosystem.
+
+This led to the expansion of our vision. Lumen is now a dual-purpose CLI:
+1.  **A Best-in-Class Local Prompt Helper:** It remains a top-tier, 100% private utility for your daily AI-assisted development.
+2.  **A Gateway to the Data Economy:** It serves as a secure bridge to the Lumen Protocol, allowing developers to ethically contribute their anonymized code and earn rewards for helping build the next generation of AI.
+
+Whether you use it locally or to interact with the network, you're using a tool built by developers, for developers. If you find the local tools useful, please consider **starring the repository!**
 
 <h2 id="features">Features</h2>
 
@@ -52,7 +64,7 @@
 1.  **Python (3.7 or higher):** Check with `python --version`. Ensure Python is added to your system's PATH during installation.
 2.  **Git:** Required only for analyzing GitHub repositories (`-g` flag). Check with `git --version`.
 
-<h2 id="installation">Installation</h2>
+<h2 id="installation--troubleshooting">Installation & Troubleshooting</h2>
 
 Install directly from PyPI:
 
@@ -63,7 +75,15 @@ pip install pylumen
 To upgrade to the latest version:
 ```bash
 pip install --upgrade pylumen
-``
+```
+
+#### Troubleshooting `command not found: lum`
+This common issue occurs when the directory where `pip` installs scripts is not in your system's PATH.
+
+*   **Quick Fix:** Run the tool as a Python module: `python -m lum --version`. If this works, you can use `python -m lum` instead of `lum`.
+*   **Permanent Fix (Recommended):**
+    *   **macOS/Linux:** Find your Python script path (often `~/.local/bin`) and add it to your shell configuration file (`~/.zshrc`, `~/.bashrc`, or `~/.bash_profile`) by adding this line: `export PATH="$HOME/.local/bin:$PATH"`. Restart your terminal or run `source ~/.zshrc` (or your respective file).
+    *   **Windows:** The easiest way is to reinstall Python and ensure the "Add Python to PATH" checkbox is selected during the installation process.
 
 <h2 id="commands">Commands</h2>
 
@@ -151,11 +171,19 @@ lum config --reset
 
 ---
 
+<h2 id="documentation">Documentation</h2>
+
+For detailed documentation on the Lumen Protocol, including the valuation engine, security practices, and our long-term vision, please visit our official documentation site.
+
+-   [Installation Guide](https://lumen.onl/docs/installation)
+-   [CLI Authentication](https://lumen.onl/docs/authentication)
+-   [Protocol Valuation Engine](https://lumen.onl/docs/valuation)
+-   [Security by Design](https://lumen.onl/docs/security)
+-   [The Lumen Whitepaper](https://lumen.onl/docs/whitepaper)
+
 <h2 id="contributing">Contributing</h2>
 
 Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues), review our [Code of Conduct](./CODE_OF_CONDUCT.md), and see `CONTRIBUTING.md` for more details.
-
-If you find Lumen useful, please consider **starring the repository** on GitHub. It helps a lot!
 
 <h2 id="license">License</h2>
 
