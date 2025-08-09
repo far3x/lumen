@@ -2,11 +2,9 @@
   <img src="./assets/logo.jpg" alt="Lumen Logo" width="200">
 </p>
 
-<h1 align="center">🪼 Lumen CLI</h1>
-
-<p align="center">
-  A multi-purpose CLI for interacting with the Lumen Protocol and generating local AI prompts from your codebase.
-</p>
+<h1 align="center">
+  🪼 Lumen CLI: The official CLI for the Lumen Protocol & Local Prompt Generation.
+</h1>
 
 <p align="center">
     <a href="https://badge.fury.io/py/pylumen"><img src="https://badge.fury.io/py/pylumen.svg" alt="PyPI version"></a>
