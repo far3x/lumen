@@ -181,7 +181,7 @@ For detailed documentation on the Lumen Protocol, including the valuation engine
 
 <h2 id="contributing">Contributing</h2>
 
-Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues), review our [Code of Conduct](./CODE_OF_CONDUCT.md), and see `CONTRIBUTING.md` for more details.
+Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues) and see `CONTRIBUTING.md` for more details.
 
 <h2 id="license">License</h2>
 
