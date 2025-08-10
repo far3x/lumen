@@ -115,12 +115,15 @@ def lum_login(args):
         print("To switch accounts, please run `lum logout` first.")
         return
 
-    print(Fore.CYAN + "Welcome to the Lumen Contributor Network!")
-    print("By logging in, you agree to contribute your anonymized code to the Lumen Protocol.")
-    print("Our CLI performs all sanitization and anonymization steps " + Fore.YELLOW + "locally on your machine" + Style.RESET_ALL + " before submission.")
-    print("Your raw code, secrets, and IP are never transmitted.\n")
+    print(Fore.CYAN + Style.BRIGHT + "Welcome to the Lumen Contributor Network!" + Style.RESET_ALL)
+    print("To authorize this device, you must agree to the following:")
+    print(f"  {Fore.YELLOW}1.{Style.RESET_ALL} You agree to our Terms of Service and Contributor License Agreement.")
+    print(f"     {Style.DIM}You can review them at lumen.onl/docs/legal{Style.RESET_ALL}")
+    print(f"  {Fore.YELLOW}2.{Style.RESET_ALL} You confirm the code you contribute is your own original work.")
+    print(f"  {Fore.YELLOW}3.{Style.RESET_ALL} You understand that all code is sanitized {Fore.GREEN+Style.BRIGHT}LOCALLY{Style.RESET_ALL} on your machine.")
+    print(f"     {Style.DIM}Your raw code, secrets, and IP are never transmitted.{Style.RESET_ALL}\n")
     
-    consent = input("Do you understand and agree to proceed? (Y/N): ").strip().upper()
+    consent = input("Do you understand and agree? (Y/N): ").strip().upper()
     if consent != "Y":
         print("Login cancelled.")
         return
