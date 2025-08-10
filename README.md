@@ -2,9 +2,9 @@
   <img src="./assets/logo.jpg" alt="Lumen Logo" width="200">
 </p>
 
-<h1 align="center">
+<h2 align="center">
   The official CLI for the Lumen Protocol & Local Prompt Generation.
-</h1>
+</h2>
 
 <p align="center">
     <a href="https://badge.fury.io/py/pylumen"><img src="https://badge.fury.io/py/pylumen.svg" alt="PyPI version"></a>
