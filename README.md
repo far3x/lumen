@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  🪼 Lumen CLI: The official CLI for the Lumen Protocol & Local Prompt Generation.
+  The official CLI for the Lumen Protocol & Local Prompt Generation.
 </h1>
 
 <p align="center">

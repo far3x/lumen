@@ -246,6 +246,8 @@ def main():
 
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
+    parser_version = subparsers.add_parser('version', help='Show version.')
+
     parser_login = subparsers.add_parser('login', help='Log in and authorize this device to contribute.')
     
     parser_logout = subparsers.add_parser('logout', help='Log out and remove local credentials.')
@@ -268,25 +270,34 @@ def main():
     args = parser.parse_args()
     check_config()
 
-    if args.command == 'login':
+    if args.command == 'version':
+        print("pylumen, version 1.0.0")
+
+    elif args.command == 'login':
         lum_login(args)
+
     elif args.command == 'logout':
         lum_logout(args)
+
     elif args.command == 'contribute':
         lum_contribute(args)
+
     elif args.command == 'history':
         lum_history(args)
+
     elif args.command == 'config':
         if args.edit:
             print("Config file opened. Check your code editor.")
             change_parameters()
         elif args.reset:
             reset_config()
+
     elif args.command == 'local':
         if args.github:
             lum_github(args)
         else:
             lum_command_local(args)
+
     else:
         print_custom_help()
 
