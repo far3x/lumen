@@ -23,7 +23,7 @@ setup(
     },
     author = "Far3k",
     author_email = "far3000yt@gmail.com",
-    description = "Lumen: Intelligently prepares your codebase context for any LLM, solving context window limits with smart retrieval and providing deep project understanding.",
+    description = "The official CLI for the Lumen Protocol & Local Prompt Generation.",
     long_description = open("README.md", encoding="utf-8").read() if os.path.exists("README.md") else "",
     long_description_content_type = "text/markdown",
     url = "https://github.com/Far3000-YT/lumen",

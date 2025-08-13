@@ -34,38 +34,38 @@ I will ask for help in the next prompt so you can assist me with this project.
 
     "skipped_files": [
         "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock", "npm-debug.log*",
-        "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock", "go.sum"
+        "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock", "go.sum",
         ".DS_Store", "Thumbs.db", ".Rhistory", ".node_repl_history", "yarn-debug.log", ".tfstate",
         ".sublime-workspace", ".sublime-project", ".env", ".tfstate.backup", "yarn-error.log",
         "a.out", "main.exe", "celerybeat-schedule", "npm-debug.log", ".eslintcache"
     ],
 
     "allowed_file_types": [
-        ".R", ".ada", ".adb", ".adoc", ".ads", ".asciidoc", ".asm", ".asp", ".aspx", ".ascx"
-        ".au3", ".avdl", ".avsc", ".babelrc", ".bash", ".bazel", ".bib", ".browserslistrc", ".c"
-        ".cc", ".cfg", ".cg", ".cjs", ".clj", ".cljc", ".cljs", ".cls", ".cmake", ".cmd", ".comp"
-        ".conf", ".cpp", ".cs", ".csproj", ".cshtml", ".css", ".dart", ".diff"
-        ".editorconfig", ".edn", ".ejs", ".elm", ".env", ".env.example", ".env.local", ".erl"
-        ".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".ex", ".exs", ".f"
-        ".f90", ".fish", ".for", ".frag", ".fx", ".gd", ".gdshader", ".geom", ".gitattributes"
-        ".gitignore", ".gitmodules", ".gitlab-ci.yml", ".glsl", ".gql", ".go", ".graphql"
-        ".groovy", ".h", ".haml", ".hbs", ".hh", ".hjson", ".hlsl", ".hpp", ".hrl", ".hs"
-        ".htaccess", ".htm", ".html", ".htpasswd", ".inc", ".ini", ".ipynb"
-        ".j2", ".java", ".jinja", ".js", ".json", ".json5", ".jsx", ".kt", ".kts", ".less", ".lhs"
-        ".liquid", ".lisp", ".log", ".lsp", ".ltx", ".lua", ".m", ".mailmap", ".markdown"
-        ".marko", ".md", ".metal", ".mjs", ".mm", ".mustache", ".netlify.toml", ".npmrc"
-        ".nvmrc", ".pas", ".patch", ".php", ".pl", ".plist", ".pm", ".pp"
-        ".prettierrc", ".prettierrc.js", ".prettierrc.json", ".prettierrc.yaml", ".properties"
-        ".proto", ".ps1", ".psd1", ".psm1", ".pug", ".py", ".pyi", ".pylintrc", ".r", ".rb"
-        ".rbw", ".rs", ".rst", ".s", ".sass", ".scala", ".scm", ".scss", ".sh"
-        ".sln", ".slim", ".soy", ".sql", ".styl", ".sty", ".sv", ".svelte"
-        ".swift", ".tcl", ".tesc", ".tese", ".tex", ".textile", ".tf", ".tfvars", ".thrift"
-        ".toml", ".ts", ".tsx", ".txt", ".twig", ".v", ".vb", ".vbhtml", ".vbproj"
-        ".vert", ".vbs", ".vhdl", ".vue", ".vtt", ".wgsl", ".xhtml", ".xml", ".yaml", ".yarnrc"
-        ".yml", ".zsh", "BUILD", "CMakeLists.txt", "Cargo.toml", "Dockerfile", "Gemfile"
-        "Jenkinsfile", "Makefile", "Pipfile", "Vagrantfile", "WORKSPACE", "bower.json"
-        "browserslist", "build.gradle", "build.xml", "composer.json", "docker-compose.yml"
-        "now.json", "package.json", "pom.xml", "pyproject.toml", "requirements.txt"
+        ".R", ".ada", ".adb", ".adoc", ".ads", ".asciidoc", ".asm", ".asp", ".aspx", ".ascx",
+        ".au3", ".avdl", ".avsc", ".babelrc", ".bash", ".bazel", ".bib", ".browserslistrc", ".c",
+        ".cc", ".cfg", ".cg", ".cjs", ".clj", ".cljc", ".cljs", ".cls", ".cmake", ".cmd", ".comp",
+        ".conf", ".cpp", ".cs", ".csproj", ".cshtml", ".css", ".dart", ".diff", ".conf", ".ino",
+        ".editorconfig", ".edn", ".ejs", ".elm", ".env", ".env.example", ".env.local", ".erl",
+        ".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yaml", ".ex", ".exs", ".f",
+        ".f90", ".fish", ".for", ".frag", ".fx", ".gd", ".gdshader", ".geom", ".gitattributes",
+        ".gitignore", ".gitmodules", ".gitlab-ci.yml", ".glsl", ".gql", ".go", ".graphql",
+        ".groovy", ".h", ".haml", ".hbs", ".hh", ".hjson", ".hlsl", ".hpp", ".hrl", ".hs",
+        ".htaccess", ".htm", ".html", ".htpasswd", ".inc", ".ini", ".ipynb",
+        ".j2", ".java", ".jinja", ".js", ".json", ".json5", ".jsx", ".kt", ".kts", ".less", ".lhs",
+        ".liquid", ".lisp", ".log", ".lsp", ".ltx", ".lua", ".m", ".mailmap", ".markdown",
+        ".marko", ".md", ".metal", ".mjs", ".mm", ".mustache", ".netlify.toml", ".npmrc",
+        ".nvmrc", ".pas", ".patch", ".php", ".pl", ".plist", ".pm", ".pp",
+        ".prettierrc", ".prettierrc.js", ".prettierrc.json", ".prettierrc.yaml", ".properties",
+        ".proto", ".ps1", ".psd1", ".psm1", ".pug", ".py", ".pyi", ".pylintrc", ".r", ".rb",
+        ".rbw", ".rs", ".rst", ".s", ".sass", ".scala", ".scm", ".scss", ".sh",
+        ".sln", ".slim", ".soy", ".sql", ".styl", ".sty", ".sv", ".svelte", ".dev",
+        ".swift", ".tcl", ".tesc", ".tese", ".tex", ".textile", ".tf", ".tfvars", ".thrift",
+        ".toml", ".ts", ".tsx", ".txt", ".twig", ".v", ".vb", ".vbhtml", ".vbproj",
+        ".vert", ".vbs", ".vhdl", ".vue", ".vtt", ".wgsl", ".xhtml", ".xml", ".yaml", ".yarnrc",
+        ".yml", ".zsh", "BUILD", "CMakeLists.txt", "Cargo.toml", "Dockerfile", "Gemfile",
+        "Jenkinsfile", "Makefile", "Pipfile", "Vagrantfile", "WORKSPACE", "bower.json",
+        "browserslist", "build.gradle", "build.xml", "composer.json", "docker-compose.yml",
+        "now.json", "package.json", "pom.xml", "pyproject.toml", "requirements.txt",
         "rollup.config.js", "setup.py", "tsconfig.json", "vercel.json", "webpack.config.js"
     ]
 }

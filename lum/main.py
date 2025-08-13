@@ -161,16 +161,16 @@ def lum_contribute(args):
     
     allowed_files = get_files_parameters()["allowed_files"]
     
-    print("1. Assembling file structure...")
+    print(" 1. Assembling file structure...")
     files_root = get_files_root(root_path, skipped_folders)
     if not files_root:
         print(Fore.YELLOW + "No allowed files found in this directory. Nothing to contribute.")
         return
     
-    print("2. Sanitizing code and preparing payload...")
+    print(" 2. Sanitizing code and preparing payload...")
     codebase = assemble_for_api(files_root, allowed_files, skipped_files)
     
-    print("3. Submitting to Lumen network...")
+    print(" 3. Submitting to Lumen network...")
     response = api.submit_contribution(pat, codebase)
     
     if response:
