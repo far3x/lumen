@@ -36,10 +36,8 @@ def gitignore_read(root: str):
         if line.startswith("!"): continue
 
         if line.endswith("/") or line.endswith("\\"):
-            normalized_path_for_basename = line.rstrip('/\\')
-
-            if not normalized_path_for_basename: continue
-            folder_name = os.path.basename(os.path.normpath(normalized_path_for_basename))
+            #no longer use os.path.basename
+            folder_name = line.rstrip('/\\')
             
             if folder_name and folder_name != "." and folder_name != "..":
                 skipped_folders.append(folder_name)

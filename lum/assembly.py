@@ -19,21 +19,28 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
     min_level = 0
     for root, _, files in os.walk(main_root):
         should_skip = False
-        for folder_name in skipped_folders:
-            if folder_name.startswith("*"):
-                if root.endswith(folder_name[1::]):
-                    _[:] = []
+        
+        relative_dir = os.path.relpath(root, main_root)
+        
+        for folder_pattern in skipped_folders:
+            if folder_pattern.startswith("*"):
+                if root.endswith(folder_pattern[1::]):
+                    should_skip = True
+                    break
+
+            elif '/' in folder_pattern or '\\' in folder_pattern:
+                normalized_pattern = os.path.normpath(folder_pattern)
+                if relative_dir == normalized_pattern or relative_dir.startswith(normalized_pattern + os.sep):
                     should_skip = True
                     break
 
             else:
-                element = root.split(os.sep)[-1]
-                if element == folder_name:
-                    _[:] = []
+                if os.path.basename(root) == folder_pattern:
                     should_skip = True
                     break
 
         if should_skip:
+            _[:] = []
             continue
 
         if min_level == 0:
@@ -47,7 +54,6 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
                     files_list[file_list_index] = file_root
 
     return files_list
-
 
 def add_intro(prompt: str, intro: str):
     prompt += intro + PROMPT_SEPERATOR
