@@ -277,7 +277,7 @@ def main():
     check_config()
 
     if args.command == 'version':
-        print("pylumen, version 1.0.0")
+        print("pylumen, version 1.0.1")
 
     elif args.command == 'login':
         lum_login(args)
