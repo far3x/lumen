@@ -1,9 +1,7 @@
 from lum.visualizer import *
 from lum.assembly import *
 from lum.config import *
-from lum.github import *
 from lum.smart_read import *
-import lum.api as api
 
 from typing import List
 import json, os, sys, platform, subprocess, argparse, pyperclip
@@ -91,6 +89,8 @@ def lum_command_local(args):
             print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
 
 def lum_github(args):
+    from lum.github import check_git, check_repo, download_repo, remove_repo 
+
     git_exists = check_git()
     if not git_exists:
         sys.exit(1)
@@ -110,6 +110,8 @@ def lum_github(args):
         remove_repo(git_root_to_remove)
 
 def lum_login(args):
+    import lum.api as api
+
     if get_pat():
         print(Fore.YELLOW + "You are already logged in.")
         print("To switch accounts, please run `lum logout` first.")
@@ -145,6 +147,8 @@ def lum_logout(args):
     print("Thank you for your contributions to the Lumen network!")
 
 def lum_contribute(args):
+    import lum.api as api
+
     pat = get_pat()
     if not pat:
         print(Fore.RED + "You are not logged in. Please run `lum login` first.")
@@ -181,6 +185,8 @@ def lum_contribute(args):
         print(Fore.RED + "\n❌ Contribution failed. Please check the error message above.")
 
 def lum_history(args):
+    import lum.api as api
+
     pat = get_pat()
     if not pat:
         print(Fore.RED + "You are not logged in. Please run `lum login` first.")

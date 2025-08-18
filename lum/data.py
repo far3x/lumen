@@ -1,10 +1,9 @@
-import re, scrubadub, os, tempfile
+import re, os, tempfile
 from pygments import lex
-from pygments.lexers import get_lexer_for_filename, guess_lexer
+from pygments.lexers import guess_lexer
 from pygments.token import Comment
 from pygments.util import ClassNotFound
 
-from trufflehog3.core import scan, load_config, load_rules, DEFAULT_RULES_FILE
 
 def _remove_comments(content: str) -> str:
     try:
@@ -15,6 +14,8 @@ def _remove_comments(content: str) -> str:
         return content
 
 def _redact_secrets(content: str) -> str:
+    from trufflehog3.core import scan, load_config, load_rules, DEFAULT_RULES_FILE
+
     sanitized_content = content
     tmp_filepath = None
     try:
@@ -42,6 +43,7 @@ def _redact_secrets(content: str) -> str:
     return sanitized_content
 
 def _redact_pii(content: str) -> str: #pii = personally identifiable informations
+    import scrubadub
     sanitized_content = scrubadub.clean(content, replace_with='placeholder')
 
     #ip for bonus removal

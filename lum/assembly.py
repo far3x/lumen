@@ -1,6 +1,5 @@
 from lum.smart_read import read_file
 from lum.gitignore import *
-from lum.data import sanitize_code
 from typing import List
 import os
 
@@ -74,6 +73,8 @@ def add_files_content(prompt: str, files_root: dict, title_text: str = None, all
     return prompt
 
 def assemble_for_api(files_root: dict, allowed_files: List = None, skipped_files: List = None):
+    from lum.data import sanitize_code
+
     full_code_blob = ""
     api_file_seperator = "\n\n---lum--new--file--"
 
