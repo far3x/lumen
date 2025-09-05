@@ -4,7 +4,7 @@ from lum.config import *
 from lum.smart_read import *
 
 from typing import List
-import json, os, sys, platform, subprocess, argparse, pyperclip, tiktoken
+import json, os, sys, platform, subprocess, argparse, pyperclip
 from colorama import init, Fore, Style
 
 init(autoreset=True)
@@ -86,6 +86,7 @@ def lum_command_local(args):
     structure = add_files_content(structure, files_root, title_text = title_text, allowed_files = allowed_files, skipped_files = skipped_files)
     
     try:
+        import tiktoken
         encoding = tiktoken.get_encoding("cl100k_base")
         token_count = len(encoding.encode(structure))
         print(f"Estimated prompt token count: {Fore.CYAN}{token_count}")
@@ -203,6 +204,7 @@ def lum_contribute(args):
     codebase = assemble_for_api(files_root, allowed_files, skipped_files)
     
     try:
+        import tiktoken
         encoding = tiktoken.get_encoding("cl100k_base")
         token_count = len(encoding.encode(codebase))
         print(f" 3. Estimated payload token count: {Fore.CYAN}{token_count}")
