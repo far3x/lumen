@@ -33,23 +33,20 @@ Good luck !
 """,
 
     "skipped_folders": [
-        ".git", ".svn", ".hg", "node_modules", "*.cache", ".*cache", ".*_cache", "_site",
-        "__pycache__", "venv", ".venv", "env", "*.egg-info", "*.dist-info", "mkdocs_build",
-        ".idea", ".vscode", "nbproject", ".settings", "DerivedData", "coverage", "~*",
-        "build", "dist", "out", "output", "target", "bin", "obj", "site", "docs/_build",
-        ".angular", ".next/cache", ".nuxt", ".parcel-cache", ".pytest_cache", "log",
-        ".mypy_cache", ".ruff_cache", ".tox", "temp", "tmp", "logs", "android/app/build",
-        "vendor", "deps", "Pods", "bower_components", "jspm_packages", "web_modules",
-        ".svelte-kit", "storage", "bootstrap/cache", "public/build", "public/hot",
-        "var", ".serverless", ".terraform", "storybook-static", "ios/Pods", "dump"
+        ".*", "node_modules", "*.cache", "_site", "__pycache__", "venv", "env",
+        "mkdocs_build", "nbproject", "DerivedData", "coverage", "~*", "build",
+        "dist", "out", "output", "target", "bin", "obj", "site", "docs/_build",
+        "log", "temp", "tmp", "logs", "android/app/build", "vendor", "deps",
+        "Pods", "bower_components", "jspm_packages", "web_modules", "storage",
+        "bootstrap/cache", "public/build", "public/hot", "var", "storybook-static",
+        "ios/Pods", "dump"
     ],
 
     "skipped_files": [
-        "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock", "npm-debug.log*",
-        "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock", "Podfile.lock", "go.sum",
-        ".DS_Store", "Thumbs.db", ".Rhistory", ".node_repl_history", "yarn-debug.log", ".tfstate",
-        ".sublime-workspace", ".sublime-project", ".env", ".tfstate.backup", "yarn-error.log",
-        "a.out", "main.exe", "celerybeat-schedule", "npm-debug.log", ".eslintcache"
+        ".*", "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Pipfile.lock",
+        "npm-debug.log*", "poetry.lock", "composer.lock", "Gemfile.lock", "Cargo.lock",
+        "Podfile.lock", "go.sum", "Thumbs.db", "yarn-debug.log", "yarn-error.log",
+        "a.out", "main.exe", "celerybeat-schedule", "npm-debug.log"
     ],
 
     "allowed_file_types": [
