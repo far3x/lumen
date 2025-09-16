@@ -99,14 +99,21 @@ def lum_command_local(args):
             print(Fore.GREEN + "Prompt copied to clipboard.")
             print(Style.DIM + "If you encounter a very big codebase, try to get a '.txt' output for better performances.")
         except pyperclip.PyperclipException as e:
-            output_path = os.path.join(os.getcwd(), "prompt.txt")
-            try:
-                with open(output_path, "w+", encoding="utf-8") as file:
-                    file.write(structure)
-                print(Fore.YELLOW + f"Copy to clipboard failed. Output saved to '{output_path}'.")
-                print(Style.DIM + "To fix clipboard issues on Linux, install xsel or xclip.")
-            except Exception as e:
-                print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
+            print(Fore.YELLOW + "Copy to clipboard failed.")
+            print(Style.DIM + "To fix clipboard issues on Linux, install xsel or xclip.")
+            
+            choice = input("Do you want to create a 'prompt.txt' file as fallback? [Y/N]: ").strip().lower()
+            
+            if choice == '' or choice == 'y':
+                output_path = os.path.join(os.getcwd(), "prompt.txt")
+                try:
+                    with open(output_path, "w+", encoding="utf-8") as file:
+                        file.write(structure)
+                    print(Fore.GREEN + f"Prompt saved to '{output_path}'.")
+                except Exception as e:
+                    print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
+            else:
+                print(Fore.YELLOW + "Prompt.txt creation cancelled.")
 
     elif output_file is not None:
         output_path = os.path.join(root_path, f"{output_file}.txt")
