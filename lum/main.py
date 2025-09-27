@@ -58,7 +58,7 @@ def lum_command_local(args):
     allowed_files = get_files_parameters()["allowed_files"]
     skipped_folders = base_parameters["skipped_folders"]
 
-    files_root = get_files_root(root_path, skipped_folders)
+    files_root, file_count, folder_count = get_files_root(root_path, skipped_folders)
     title_text = base_parameters["title_text"]
 
     if args.leaderboard is not None:
@@ -92,6 +92,8 @@ def lum_command_local(args):
         print(f"Estimated prompt token count: {Fore.CYAN}{token_count}")
     except Exception:
         print(f"{Fore.YELLOW}Could not calculate token count.")
+
+    print(f"Analyzed {Fore.CYAN}{file_count}{Style.RESET_ALL} files across {Fore.CYAN}{folder_count}{Style.RESET_ALL} folders.")
 
     if output_file is None:
         try:
@@ -202,7 +204,8 @@ def lum_contribute(args):
     allowed_files = get_files_parameters()["allowed_files"]
     
     print(" 1. Assembling file structure...")
-    files_root = get_files_root(root_path, skipped_folders)
+    files_root, file_count, folder_count = get_files_root(root_path, skipped_folders)
+    print(f"    Found {file_count} files across {folder_count} folders.")
     if not files_root:
         print(Fore.YELLOW + "No allowed files found in this directory. Nothing to contribute.")
         return

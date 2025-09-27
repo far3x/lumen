@@ -15,6 +15,7 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
         _, skipped_folders = gitignore_skipping()
 
     files_list = {}
+    analyzed_folder_count = 0
     min_level = 0
     for root, _, files in os.walk(main_root):
         should_skip = False
@@ -45,6 +46,7 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
             _[:] = []
             continue
 
+        analyzed_folder_count += 1
         if min_level == 0:
             min_level = len(main_root.split(os.sep))
 
@@ -57,7 +59,7 @@ def get_files_root(main_root: str, skipped_folders: List, allowed: List = None):
                     file_list_index = "/".join(file_root.split(os.sep)[min_level::])
                     files_list[file_list_index] = file_root
 
-    return files_list
+    return files_list, len(files_list), analyzed_folder_count
 
 def add_intro(prompt: str, intro: str):
     prompt += intro + PROMPT_SEPERATOR
