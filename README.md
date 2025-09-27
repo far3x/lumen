@@ -39,33 +39,31 @@
 
 <h2 id="why-lumen">Why Lumen?</h2>
 
-Lumen started as a powerful local tool for developers to generate flawless, LLM-ready prompts from their codebases, solving the tedious process of manual context building. As we built it, we recognized a larger opportunity: the very code developers were analyzing held immense, untapped value for the AI ecosystem.
+Lumen is a dual-purpose CLI designed for developers. It began as a powerful local tool to solve the tedious process of manual context building for LLMs and evolved into a gateway for developers to ethically contribute to the AI data economy.
 
-This led to the expansion of our vision. Lumen is now a dual-purpose CLI:
-1.  **A Best-in-Class Local Prompt Helper:** It remains a top-tier, 100% private utility for your daily AI-assisted development.
-2.  **A Gateway to the Data Economy:** It serves as a secure bridge to the Lumen Protocol, allowing developers to ethically contribute their anonymized code and earn rewards for helping build the next generation of AI.
+1.  **A Best-in-Class Local Prompt Helper:** A 100% private utility for your daily AI-assisted development.
+2.  **A Gateway to the Data Economy:** A secure bridge to the Lumen Protocol, allowing developers to ethically contribute their anonymized code and earn rewards.
 
-Whether you use it locally or to interact with the network, you're using a tool built by developers, for developers. If you find the local tools useful, please consider **starring the repository!**
+If you find the local tools useful, please consider **starring the repository!**
 
 <h2 id="features">Features</h2>
 
 *   **Network Interaction:** Securely contribute your anonymized code to the Lumen Protocol and track your submission history.
 *   **Local Prompt Generation:** Assemble entire codebases into a single, LLM-ready prompt without sending any data.
 *   **100% Local Anonymization:** All code sanitization for protocol contributions happens on your machine. Your raw code is never uploaded.
-*   **Smart File Handling:** Intelligently respects `.gitignore`, parses Jupyter Notebooks (`.ipynb`), and uses an optimized file reading strategy.
+*   **Smart File Handling:** Intelligently respects `.gitignore`, ignores dotfiles, parses Jupyter Notebooks (`.ipynb`) (locally), and uses an optimized / custom-built + unique file reading strategy.
 *   **GitHub Repository Support:** Analyze any public GitHub repository directly by providing its URL.
-*   **Token Usage Analysis:** Identify the most token-heavy files in a project to help manage context window limitations.
-*   **Customizable Filtering:** Edit a simple `config.json` file to control which files, folders, and types are processed.
+*   **Token Usage Analysis:** Identify the most token-heavy files in a project to manage context window limitations.
+*   **Customizable Filtering:** Use the CLI or edit a simple `config.json` file to control which files, folders, and types are processed.
 
 <h2 id="prerequisites">Prerequisites</h2>
 
-1.  **Python (3.7 or higher):** Check with `python --version`. Ensure Python is added to your system's PATH during installation.
+1.  **Python (3.7 or higher):** Check with `python --version`.
 2.  **Git:** Required only for analyzing GitHub repositories (`-g` flag). Check with `git --version`.
 
 <h2 id="installation--troubleshooting">Installation & Troubleshooting</h2>
 
 Install directly from PyPI:
-
 ```bash
 pip install pylumen
 ```
@@ -76,12 +74,12 @@ pip install --upgrade pylumen
 ```
 
 #### Troubleshooting `command not found: lum`
-This common issue occurs when the directory where `pip` installs scripts is not in your system's PATH.
+This occurs when the `pip` scripts directory is not in your system's PATH.
 
-*   **Quick Fix:** Run the tool as a Python module: `python -m lum --version`. If this works, you can use `python -m lum` instead of `lum`.
+*   **Quick Fix:** Run the tool as a Python module: `python -m lum --version`.
 *   **Permanent Fix (Recommended):**
-    *   **macOS/Linux:** Find your Python script path (often `~/.local/bin`) and add it to your shell configuration file (`~/.zshrc`, `~/.bashrc`, or `~/.bash_profile`) by adding this line: `export PATH="$HOME/.local/bin:$PATH"`. Restart your terminal or run `source ~/.zshrc` (or your respective file).
-    *   **Windows:** The easiest way is to reinstall Python and ensure the "Add Python to PATH" checkbox is selected during the installation process.
+    *   **macOS/Linux:** Find your Python script path (often `~/.local/bin`) and add it to your shell configuration (`~/.zshrc`, `~/.bashrc`): `export PATH="$HOME/.local/bin:$PATH"`. Restart your terminal.
+    *   **Windows:** Reinstall Python and ensure the "Add Python to PATH" checkbox is selected.
 
 <h2 id="commands">Commands</h2>
 
@@ -89,29 +87,25 @@ This common issue occurs when the directory where `pip` installs scripts is not 
 These commands interact with the Lumen Protocol backend.
 
 **Authorize Device**
-Initiates the secure, browser-based login flow to link your CLI to your Lumen account.
-
+Initiates the secure login flow to link your CLI to a Lumen account.
 ```bash
 lum login
 ```
 
 **Contribute Code**
-Analyzes, sanitizes, and submits the current project from your local machine to the Lumen network.
-
+Analyzes, sanitizes, and submits the current project to the Lumen network.
 ```bash
 lum contribute
 ```
 
 **View History**
-Displays the status of your last 10 contributions to the network.
-
+Displays the status of your last 10 contributions.
 ```bash
 lum history
 ```
 
 **De-authorize Device**
 Logs out and securely removes the local authentication token.
-
 ```bash
 lum logout
 ```
@@ -120,29 +114,25 @@ lum logout
 These commands do **not** send any data to the network.
 
 **Analyze Current Directory**
-Assembles the current project into a prompt and copies it to your clipboard.
-
+Assembles the project into a prompt and copies it to your clipboard.
 ```bash
 lum local
 ```
 
 **Save Prompt to File**
-Saves the generated prompt to a `.txt` file instead of copying to the clipboard.
-
+Saves the prompt to a `.txt` file instead of copying.
 ```bash
 lum local -t my_project_prompt
 ```
 
 **Analyze a GitHub Repository**
 Clones a public repo to a temporary directory for analysis.
-
 ```bash
 lum local -g https://github.com/user/repo-name
 ```
 
 **Identify Token-Heavy Files**
 Shows a leaderboard of the most token-consuming files.
-
 ```bash
 # See the top 20 (default) files
 lum local -l
@@ -154,17 +144,25 @@ lum local -l 10
 <h3 id="configuration">Configuration</h3>
 
 **Edit Configuration**
-Opens your `config.json` file in your system's default text editor.
-
+Opens `config.json` in your system's default text editor.
 ```bash
 lum config --edit
 ```
 
 **Reset Configuration**
-Resets all settings in `config.json` to their latest default values.
-
+Resets all settings in `config.json` to their default values.
 ```bash
 lum config --reset
+```
+
+**Set a Specific Value**
+Changes a single setting directly from the terminal.
+```bash
+# Enable a boolean setting
+lum config --set use_ai_instructions true
+
+# Overwrite a list (provide as a comma-separated string)
+lum config --set skipped_files ".DS_Store,yarn.lock"
 ```
 
 ---
@@ -181,7 +179,7 @@ For detailed documentation on the Lumen Protocol, including the valuation engine
 
 <h2 id="contributing">Contributing</h2>
 
-Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues) and see `CONTRIBUTING.md` for more details.
+Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues) and see `CONTRIBUTING.md` for details.
 
 <h2 id="license">License</h2>
 

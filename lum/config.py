@@ -5,7 +5,9 @@ EXPECTED_CONFIG_KEYS = [
     "title_text",
     "skipped_folders",
     "skipped_files",
-    "allowed_file_types"
+    "allowed_file_types",
+    "use_ai_instructions",
+    "ai_instructions_text"
 ]
 
 BASE_CONFIG = {
@@ -19,6 +21,16 @@ I will ask for help in the next prompt so you can assist me with this project.
 """,
 
     "title_text": "--- FILE : {file} ---",
+
+    "use_ai_instructions": False,
+    "ai_instructions_text": """Please follow these rules :
+
+- Don't comment the code at all, unless it's specified. If comments are here, keep them, otherwise don't add any yourself, even after alot of messages, this is an important rule.
+- Output the entirity of the files that changed after I asked for something, no laziness is allowed, so even if the file is long, output it entirely.
+- At the end, always do a paragraph / do points to explain the changes that you did precisely.
+
+Good luck !
+""",
 
     "skipped_folders": [
         ".git", ".svn", ".hg", "node_modules", "*.cache", ".*cache", ".*_cache", "_site",
@@ -146,6 +158,33 @@ def save_config_data(data):
     except Exception as e:
         print(f"Could not save config file: {e}")
 
+def set_config_value(key: str, value_str: str):
+    if key not in BASE_CONFIG:
+        print(f"Error: Invalid configuration key '{key}'.")
+        print("Available keys:", ", ".join(BASE_CONFIG.keys()))
+        return
+
+    config_data = get_config_data()
+    target_type = type(BASE_CONFIG[key])
+
+    processed_value = value_str
+    try:
+        if target_type is bool:
+            processed_value = value_str.lower() in ['true', '1', 't', 'y', 'yes'] #set to true if one of these in list
+        elif target_type is list:
+            processed_value = [item.strip() for item in value_str.split(',')]
+        elif target_type is int:
+            processed_value = int(value_str)
+        elif target_type is float:
+            processed_value = float(value_str)
+    except ValueError:
+        print(f"Error: Could not convert '{value_str}' to the required type for key '{key}'.")
+        return
+
+    config_data[key] = processed_value
+    save_config_data(config_data)
+    print(f"Successfully updated '{key}' to: {processed_value}")
+
 def store_pat(pat: str):
     config_data = get_config_data()
     config_data["pat"] = pat
@@ -175,3 +214,9 @@ def get_skipped_files():
 
 def get_allowed_file_types():
     return get_config_data().get("allowed_file_types", BASE_CONFIG["allowed_file_types"])
+
+def get_use_ai_instructions():
+    return get_config_data().get("use_ai_instructions", BASE_CONFIG["use_ai_instructions"])
+
+def get_ai_instructions_text():
+    return get_config_data().get("ai_instructions_text", BASE_CONFIG["ai_instructions_text"])

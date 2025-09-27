@@ -45,7 +45,12 @@ def lum_command_local(args):
     check_config()
     base_parameters = get_parameters()
 
+    config_data = get_config_data()
+    use_ai_instructions = config_data.get("use_ai_instructions", False)
+    ai_instructions_text = config_data.get("ai_instructions_text", "")
     intro_text = base_parameters["intro_text"]
+    if use_ai_instructions and ai_instructions_text:
+        intro_text += "\n\nPlease read and remember the special instructions in `ai-instructions.txt` before proceeding."
 
     if gitignore_exists(""): skipped_files, _ = gitignore_skipping()
     else: skipped_files = get_files_parameters()["non_allowed_read"]
@@ -53,7 +58,7 @@ def lum_command_local(args):
     allowed_files = get_files_parameters()["allowed_files"]
     skipped_folders = base_parameters["skipped_folders"]
 
-    files_root = get_files_root(root_path, skipped_folders)
+    files_root, file_count, folder_count = get_files_root(root_path, skipped_folders)
     title_text = base_parameters["title_text"]
 
     if args.leaderboard is not None:
@@ -61,8 +66,34 @@ def lum_command_local(args):
 
     structure = ""
     structure = add_intro(structure, intro_text)
-    structure = add_structure(structure, make_structure(root_path, skipped_folders))
+
+    json_structure_str = make_structure(root_path, skipped_folders)
+    if use_ai_instructions and ai_instructions_text:
+        try:
+            json_structure = json.loads(json_structure_str)
+            root_key = next(iter(json_structure))
+            json_structure[root_key]["ai-instructions.txt"] = {}
+            json_structure_str = json.dumps(json_structure, indent=4)
+        except (json.JSONDecodeError, StopIteration):
+            pass 
+    
+    structure = add_structure(structure, json_structure_str)
+
+    if use_ai_instructions and ai_instructions_text:
+        structure += title_text.format(file="ai-instructions.txt") + PROMPT_SEPERATOR
+        structure += ai_instructions_text + PROMPT_SEPERATOR
+
     structure = add_files_content(structure, files_root, title_text = title_text, allowed_files = allowed_files, skipped_files = skipped_files)
+    
+    try:
+        import tiktoken
+        encoding = tiktoken.get_encoding("cl100k_base")
+        token_count = len(encoding.encode(structure))
+        print(f"Estimated prompt token count: {Fore.CYAN}{token_count}")
+    except Exception:
+        print(f"{Fore.YELLOW}Could not calculate token count.")
+
+    print(f"Analyzed {Fore.CYAN}{file_count}{Style.RESET_ALL} files across {Fore.CYAN}{folder_count}{Style.RESET_ALL} folders.")
 
     if output_file is None:
         try:
@@ -70,14 +101,21 @@ def lum_command_local(args):
             print(Fore.GREEN + "Prompt copied to clipboard.")
             print(Style.DIM + "If you encounter a very big codebase, try to get a '.txt' output for better performances.")
         except pyperclip.PyperclipException as e:
-            output_path = os.path.join(os.getcwd(), "prompt.txt")
-            try:
-                with open(output_path, "w+", encoding="utf-8") as file:
-                    file.write(structure)
-                print(Fore.YELLOW + f"Copy to clipboard failed. Output saved to '{output_path}'.")
-                print(Style.DIM + "To fix clipboard issues on Linux, install xsel or xclip.")
-            except Exception as e:
-                print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
+            print(Fore.YELLOW + "Copy to clipboard failed.")
+            print(Style.DIM + "To fix clipboard issues on Linux, install xsel or xclip.")
+            
+            choice = input("Do you want to create a 'prompt.txt' file as fallback? [Y/N]: ").strip().lower()
+            
+            if choice == '' or choice == 'y':
+                output_path = os.path.join(os.getcwd(), "prompt.txt")
+                try:
+                    with open(output_path, "w+", encoding="utf-8") as file:
+                        file.write(structure)
+                    print(Fore.GREEN + f"Prompt saved to '{output_path}'.")
+                except Exception as e:
+                    print(Fore.RED + f"Error saving prompt to file {output_path}: {e}")
+            else:
+                print(Fore.YELLOW + "Prompt.txt creation cancelled.")
 
     elif output_file is not None:
         output_path = os.path.join(root_path, f"{output_file}.txt")
@@ -166,7 +204,8 @@ def lum_contribute(args):
     allowed_files = get_files_parameters()["allowed_files"]
     
     print(" 1. Assembling file structure...")
-    files_root = get_files_root(root_path, skipped_folders)
+    files_root, file_count, folder_count = get_files_root(root_path, skipped_folders)
+    print(f"    Found {file_count} files across {folder_count} folders.")
     if not files_root:
         print(Fore.YELLOW + "No allowed files found in this directory. Nothing to contribute.")
         return
@@ -174,7 +213,15 @@ def lum_contribute(args):
     print(" 2. Sanitizing code and preparing payload...")
     codebase = assemble_for_api(files_root, allowed_files, skipped_files)
     
-    print(" 3. Submitting to Lumen network...")
+    try:
+        import tiktoken
+        encoding = tiktoken.get_encoding("cl100k_base")
+        token_count = len(encoding.encode(codebase))
+        print(f" 3. Estimated payload token count: {Fore.CYAN}{token_count}")
+    except Exception:
+        print(f"{Fore.YELLOW}Could not calculate token count for payload.")
+
+    print(" 4. Submitting to Lumen network...")
     response = api.submit_contribution(pat, codebase)
     
     if response:
@@ -239,8 +286,9 @@ def print_custom_help():
     print(f"    {Fore.CYAN}{'-l [num]':<13}{Style.RESET_ALL} Show a leaderboard of the most token-heavy files (default: 20).")
 
     print("\n" + Style.BRIGHT + "Configuration" + Style.RESET_ALL)
-    print(f"  {Fore.YELLOW}{'config --edit':<15}{Style.RESET_ALL} Open the configuration file for editing.")
-    print(f"  {Fore.YELLOW}{'config --reset':<15}{Style.RESET_ALL} Reset all settings to their default values.")
+    print(f"  {Fore.YELLOW}{'config --edit':<20}{Style.RESET_ALL} Open the configuration file for editing.")
+    print(f"  {Fore.YELLOW}{'config --reset':<20}{Style.RESET_ALL} Reset all settings to their default values.")
+    print(f"  {Fore.YELLOW}{'config --set <k> <v>':<20}{Style.RESET_ALL} Set a specific configuration value.")
 
     print("\n" + Style.DIM + "Use 'lum <command> --help' for more details on any command.")
 
@@ -272,12 +320,13 @@ def main():
     config_group = parser_config.add_mutually_exclusive_group(required=True)
     config_group.add_argument('--edit', action='store_true', help='Open config file for editing.')
     config_group.add_argument('--reset', action='store_true', help='Reset config to defaults.')
+    config_group.add_argument('--set', nargs=2, metavar=('KEY', 'VALUE'), help='Set a specific configuration value (e.g., use_ai_instructions true).')
 
     args = parser.parse_args()
     check_config()
 
     if args.command == 'version':
-        print("pylumen, version 1.0.1")
+        print("pylumen, version v2.0.0")
 
     elif args.command == 'login':
         lum_login(args)
@@ -297,6 +346,9 @@ def main():
             change_parameters()
         elif args.reset:
             reset_config()
+        elif args.set:
+            key, value = args.set
+            set_config_value(key, value)
 
     elif args.command == 'local':
         if args.github:

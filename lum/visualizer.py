@@ -13,6 +13,12 @@ def get_project_structure(root_path: str, skipped_folders: List):
         _, skipped_folders = gitignore_skipping()
     
     for root, _, files in os.walk(root_path, topdown = True):
+        #skipping folders starting with "."
+        relative_dir = os.path.relpath(root, root_path)
+        if any(part.startswith('.') for part in relative_dir.split(os.sep) if part != '.'):
+            _[:] = []
+            continue
+
         should_skip = False
         for folder_name in skipped_folders:
             #in skipped_folders, if starts wiht "*" -> will skip anything that ENDS with the skipped folder name, otherwise will take the folder name directly, and ONLY this
