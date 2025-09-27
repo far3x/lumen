@@ -158,6 +158,33 @@ def save_config_data(data):
     except Exception as e:
         print(f"Could not save config file: {e}")
 
+def set_config_value(key: str, value_str: str):
+    if key not in BASE_CONFIG:
+        print(f"Error: Invalid configuration key '{key}'.")
+        print("Available keys:", ", ".join(BASE_CONFIG.keys()))
+        return
+
+    config_data = get_config_data()
+    target_type = type(BASE_CONFIG[key])
+
+    processed_value = value_str
+    try:
+        if target_type is bool:
+            processed_value = value_str.lower() in ['true', '1', 't', 'y', 'yes'] #set to true if one of these in list
+        elif target_type is list:
+            processed_value = [item.strip() for item in value_str.split(',')]
+        elif target_type is int:
+            processed_value = int(value_str)
+        elif target_type is float:
+            processed_value = float(value_str)
+    except ValueError:
+        print(f"Error: Could not convert '{value_str}' to the required type for key '{key}'.")
+        return
+
+    config_data[key] = processed_value
+    save_config_data(config_data)
+    print(f"Successfully updated '{key}' to: {processed_value}")
+
 def store_pat(pat: str):
     config_data = get_config_data()
     config_data["pat"] = pat

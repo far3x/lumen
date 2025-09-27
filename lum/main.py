@@ -283,8 +283,9 @@ def print_custom_help():
     print(f"    {Fore.CYAN}{'-l [num]':<13}{Style.RESET_ALL} Show a leaderboard of the most token-heavy files (default: 20).")
 
     print("\n" + Style.BRIGHT + "Configuration" + Style.RESET_ALL)
-    print(f"  {Fore.YELLOW}{'config --edit':<15}{Style.RESET_ALL} Open the configuration file for editing.")
-    print(f"  {Fore.YELLOW}{'config --reset':<15}{Style.RESET_ALL} Reset all settings to their default values.")
+    print(f"  {Fore.YELLOW}{'config --edit':<20}{Style.RESET_ALL} Open the configuration file for editing.")
+    print(f"  {Fore.YELLOW}{'config --reset':<20}{Style.RESET_ALL} Reset all settings to their default values.")
+    print(f"  {Fore.YELLOW}{'config --set <k> <v>':<20}{Style.RESET_ALL} Set a specific configuration value.")
 
     print("\n" + Style.DIM + "Use 'lum <command> --help' for more details on any command.")
 
@@ -316,6 +317,7 @@ def main():
     config_group = parser_config.add_mutually_exclusive_group(required=True)
     config_group.add_argument('--edit', action='store_true', help='Open config file for editing.')
     config_group.add_argument('--reset', action='store_true', help='Reset config to defaults.')
+    config_group.add_argument('--set', nargs=2, metavar=('KEY', 'VALUE'), help='Set a specific configuration value (e.g., use_ai_instructions true).')
 
     args = parser.parse_args()
     check_config()
@@ -341,6 +343,9 @@ def main():
             change_parameters()
         elif args.reset:
             reset_config()
+        elif args.set:
+            key, value = args.set
+            set_config_value(key, value)
 
     elif args.command == 'local':
         if args.github:
