@@ -26,7 +26,7 @@ setup(
     description = "The official CLI for the Lumen Protocol & Local Prompt Generation.",
     long_description = open("README.md", encoding="utf-8").read() if os.path.exists("README.md") else "",
     long_description_content_type = "text/markdown",
-    url = "https://github.com/Far3000-YT/lumen",
+    url = "https://github.com/far3x/lumen",
     classifiers = [
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",

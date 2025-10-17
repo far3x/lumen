@@ -13,10 +13,10 @@
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 <p align="center">
-    <a href="https://github.com/Far3000-YT/lumen/actions/workflows/release.yaml"><img src="https://github.com/Far3000-YT/lumen/actions/workflows/release.yaml/badge.svg" alt="Build Status"></a>
-    <a href="https://github.com/Far3000-YT/lumen/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome"></a>
+    <a href="https://github.com/far3x/lumen/actions/workflows/release.yaml"><img src="https://github.com/far3x/lumen/actions/workflows/release.yaml/badge.svg" alt="Build Status"></a>
+    <a href="https://github.com/far3x/lumen/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome"></a>
     <a href="https://lumen.onl/docs/introduction"><img src="https://img.shields.io/badge/docs-lumen.onl-13131A.svg" alt="Documentation"></a>
-    <a href="https://github.com/Far3000-YT/lumen/stargazers/"><img src="https://img.shields.io/github/stars/Far3000-YT/lumen.svg?style=social&label=Star" alt="GitHub stars"></a>
+    <a href="https://github.com/far3x/lumen/stargazers/"><img src="https://img.shields.io/github/stars/far3x/lumen.svg?style=social&label=Star" alt="GitHub stars"></a>
 </p>
 
 ---
@@ -179,7 +179,7 @@ For detailed documentation on the Lumen Protocol, including the valuation engine
 
 <h2 id="contributing">Contributing</h2>
 
-Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/Far3000-YT/lumen/issues) and see `CONTRIBUTING.md` for details.
+Contributions, issues, and feature requests are welcome! Please check the [issues page](https://github.com/far3x/lumen/issues) and see `CONTRIBUTING.md` for details.
 
 <h2 id="license">License</h2>
 
