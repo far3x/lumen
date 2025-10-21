@@ -250,7 +250,7 @@ def lum_history(args):
         print(Fore.YELLOW + "No contributions found.")
         return
 
-    print("\n" + Style.BRIGHT + "{:<5} {:<22} {:<30} {:<15}".format("ID", "Date", "Status", "Reward ($LUM)") + Style.RESET_ALL)
+    print("\n" + Style.BRIGHT + "{:<5} {:<22} {:<30} {:<15}".format("ID", "Date", "Status", "Reward ($USDC)") + Style.RESET_ALL)
     print("-" * 75)
     for item in history:
         date = item.get('created_at').split('T')[0]
